@@ -19,6 +19,28 @@ class RestaurantInfo{
     );
   }
 
+  factory RestaurantInfo.fromSnapshot(DocumentSnapshot documentSnapshot){
+    return RestaurantInfo(
+        id: documentSnapshot.data['id'],
+       name: documentSnapshot.data['name'],
+        location: Location.fromJson(documentSnapshot.data['location']),
+        thumb: documentSnapshot.data['thumb'],
+    );
+
+
+
+  }
+
+  Map<String, dynamic> toMap() =>{
+    'id': id != null ? id : -1,
+    'name': name != null ? name : 'unknown',
+    'location': location != null ? location.toMap() : 'unknown',
+    'thumb': thumb != null ? thumb : 'unknown',
+
+  };
+
+
+
 
 
 }

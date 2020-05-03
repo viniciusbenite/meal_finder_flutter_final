@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mealfinder/FoodLog.dart';
+
 
 class AddLog extends StatefulWidget {
 
@@ -101,8 +104,23 @@ class _AddLogState extends State<AddLog>{
   }
 
   void onSubmit(){
+    //send food log to firestore
+
     print ("Submitting");
     print (Text(myController1.text).toString() + " " + Text(myController2.text).toString() + " "+_selectedDate.toString() );
+    addToLogs(myController1.text.toString(), myController2.text.toString(), _selectedDate.toString());
+  }
+
+  Future addToLogs(String logName, String mealName, String mealDate) async {
+    try {
+      final CollectionReference _favoritesCollectionReference =
+      Firestore.instance.collection('food_logs');
+      FoodLog foodLog= new FoodLog(logName: logName, mealName: mealName, mealDate: mealDate);
+      await _favoritesCollectionReference.add(foodLog.toMap());
+      return true;
+    } catch (e) {
+      return e.toString();
+    }
   }
 
 }

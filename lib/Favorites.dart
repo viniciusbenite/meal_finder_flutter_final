@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/RestaurantInfo.dart';
 
+import 'Details.dart';
+
 
 class Favorites extends StatefulWidget {
 
@@ -39,14 +41,10 @@ class _FavoritesState extends State<Favorites>{
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String id=data['id'];
-    String name=data['name'];
-    String thumb=data['thumb'];
-    String location=data['location'];
-    //final restaurantInfo = RestaurantInfo.fromSnapshot(data);
+    final restaurantInfo = RestaurantInfo.fromSnapshot(data);
 
     return Padding(
-      key: ValueKey(name),
+
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
@@ -54,9 +52,10 @@ class _FavoritesState extends State<Favorites>{
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: ListTile(
-          title: Text(name),
-          trailing: Text(location),
-          onTap: () => print(id + " "+name + " "+location),
+          title: Text(restaurantInfo.name),
+          trailing: Text(restaurantInfo.location.locality),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Details(restId: int.parse(restaurantInfo.id))),
+            ),
         ),
       ),
     );

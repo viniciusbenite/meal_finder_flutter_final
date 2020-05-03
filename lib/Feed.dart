@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mealfinder/Location.dart';
 import 'package:mealfinder/RestaurantInfo.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -105,9 +106,19 @@ class _FeedState extends State<Feed> {
     );
   }
 
-  void addToFavorites(String id, String title, String subtitle,
-      String thumb) async {
-    DocumentReference ref = await databaseReference.collection("favorites").add({"id": id, "name": title, "location": subtitle, "thumb": thumb});
+
+    Future addToFavorites(String id, String title, String subtitle,
+        String thumb) async {
+      try {
+        final CollectionReference _favoritesCollectionReference =
+        Firestore.instance.collection('favorites');
+        RestaurantInfo restaurantInfo= new RestaurantInfo(id: id, name: title, location: new Location(locality: subtitle), thumb: thumb);
+        print (restaurantInfo.location);
+        await _favoritesCollectionReference.add(restaurantInfo.toMap());
+        return true;
+      } catch (e) {
+        return e.toString();
+      }
+    }
 
   }
-}
