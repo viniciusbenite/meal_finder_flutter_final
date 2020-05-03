@@ -72,31 +72,89 @@ class _FeedState extends State<Feed> {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return restInfo(
+          return restInfoV2(
               data[index].restaurantInfo.id, data[index].restaurantInfo.name,
               data[index].restaurantInfo.location.locality,
               data[index].restaurantInfo.thumb);
         });
   }
-
-  ListTile restInfo(String id, String title, String subtitle, String thumb) =>
-      ListTile(
-        title: Text(title,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            )),
-        subtitle: Text(subtitle),
-        trailing: new IconButton(
-          icon: new Icon(Icons.favorite_border),
-          onPressed: () {
-            print("Added to favorites");
-            //call firebase to add to favorites
-            addToFavorites(id, title, subtitle, thumb);
-          },
-        ),
+  InkWell restInfoV2(String id, String title, String subtitle, String thumb){
+    return new InkWell(
+      //onTap go to the details
         onTap: () => onTapped(id),
-      );
+      child:
+        Card(
+      shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(15.0)),
+      elevation: 10.0,
+      child: Column(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height/6,
+                width: MediaQuery.of(context).size.width,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  child: Image.network(
+                    thumb,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0.0,
+                right: 0.0,
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          color: Colors.red,
+                          icon: new Icon(Icons.favorite_border),
+                          onPressed: () {
+                            print("Added to favorites");
+                            //call firebase to add to favorites
+                            addToFavorites(id, title, subtitle, thumb);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+            ],
+          ),
+          SizedBox(height: 5.0),
+          Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 5.0),
+          Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 5.0),
+        ],
+      ),
+    ),
+    );
+  }
 
   void onTapped(String id) {
     print("tapped with id " + id);
@@ -105,7 +163,6 @@ class _FeedState extends State<Feed> {
       MaterialPageRoute(builder: (context) => Details(restId: int.parse(id))),
     );
   }
-
 
     Future addToFavorites(String id, String title, String subtitle,
         String thumb) async {
