@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "443991997091",
+    "firebase_url": "https://mealfinderflutter.firebaseio.com",
+    "project_id": "mealfinderflutter",
+    "storage_bucket": "mealfinderflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443991997091:android:6a2c2a28c977435a91dd16",
+        "android_client_info": {
+          "package_name": "com.example.mealfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443991997091-rkq9geagg6lmd1dhgb040vhs8eipgsh8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4y9oI4CHNZ74-h2c-vENz5eWd8RjL0G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443991997091-rkq9geagg6lmd1dhgb040vhs8eipgsh8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
