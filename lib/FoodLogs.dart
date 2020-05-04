@@ -59,10 +59,21 @@ class _FoodLogsState extends State<FoodLogs> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
+
         child: ListTile(
           title: Text(foodLog.logName),
           subtitle: Text(foodLog.mealName),
           trailing: Text(foodLog.mealDate),
+          leading: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: 44,
+              minHeight: 44,
+              maxWidth: 44,
+              maxHeight: 44,
+            ),
+            child: Image.network(foodLog.pictureUrl.toString(), fit: BoxFit.cover),
+          ),
+
           onTap: () => print ('Clicked food log'),
           ),
         ),

@@ -1,8 +1,18 @@
+
+
+import 'dart:io';
+
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/FoodLog.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+import 'FoodLogs.dart';
+
 
 
 class AddLog extends StatefulWidget {
@@ -13,6 +23,15 @@ class AddLog extends StatefulWidget {
 }
 
 class _AddLogState extends State<AddLog>{
+  File _image;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
   String _selectedDate;
 
   final myController1 = TextEditingController();
@@ -84,15 +103,28 @@ class _AddLogState extends State<AddLog>{
                   });
                 });
               },
-            )
+            ),
 
+            _image == null
+                ? Text('No image selected.')
+                : Image.file(_image, width: 200, height: 200,),
 
+            RaisedButton(
+              onPressed: getImage,
+              child: (Icon(Icons.add_a_photo)),
+            ),
           ],
         ),
 
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: onSubmit,
+        onPressed: (){
+          onSubmit();
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FoodLogs()),
+          );
+        },
         label: Text("Submit"),
         backgroundColor: Colors.purple,
 
@@ -103,19 +135,36 @@ class _AddLogState extends State<AddLog>{
 
   }
 
-  void onSubmit(){
+  Future onSubmit() async{
     //send food log to firestore
+
+    String fileName = basename(_image.path);
+    FirebaseStorage _storage = FirebaseStorage.instance;
+
+    //passing your path with the filename to Firebase Storage Reference
+    StorageReference reference =
+    _storage.ref().child("images/$fileName");
+
+    //upload the file to Firebase Storage
+    StorageUploadTask uploadTask = reference.putFile(_image);
+
+    //Snapshot of the uploading task
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    String url=reference.getDownloadURL().toString();
+    String newUrl = url.toString();
+
 
     print ("Submitting");
     print (Text(myController1.text).toString() + " " + Text(myController2.text).toString() + " "+_selectedDate.toString() );
-    addToLogs(myController1.text.toString(), myController2.text.toString(), _selectedDate.toString());
+    addToLogs(myController1.text.toString(), myController2.text.toString(), _selectedDate.toString(), newUrl);
+
   }
 
-  Future addToLogs(String logName, String mealName, String mealDate) async {
+  Future addToLogs(String logName, String mealName, String mealDate, String thumb) async {
     try {
       final CollectionReference _favoritesCollectionReference =
       Firestore.instance.collection('food_logs');
-      FoodLog foodLog= new FoodLog(logName: logName, mealName: mealName, mealDate: mealDate);
+      FoodLog foodLog= new FoodLog(logName: logName, mealName: mealName, mealDate: mealDate, pictureUrl: thumb);
       await _favoritesCollectionReference.add(foodLog.toMap());
       return true;
     } catch (e) {

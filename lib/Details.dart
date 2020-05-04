@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
 import 'RestaurantDetails.dart';
 
@@ -44,31 +45,138 @@ class _DetailsState extends State<Details>{
   }
   @override
   Widget build(BuildContext context) {
+    return  Center(
+          child: FutureBuilder<RestaurantDetails>(
+            future: restDetails,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                RestaurantDetails data = snapshot.data;
+                return restDetailsView(data);
+              }
+              else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              return CircularProgressIndicator();
+            },
+          )
+      );
+  }
+
+  Widget restDetailsView(RestaurantDetails details) {
     return Scaffold(
-        appBar: AppBar(
-          title: new Text("Details"),
-        ),
-        body: Center(
-            child: FutureBuilder<RestaurantDetails>(
-              future: restDetails,
-              builder: (context, snapshot){
-                if (snapshot.hasData){
-                  RestaurantDetails data=snapshot.data;
-                  return new Text(data.name+' '+data.location.locality+ ' '+data.timings + ' '+data.averageCostForTwo.toString() + data.currency+' '+data.cuisines);
+      appBar: AppBar(
+        title: new Text("Details"),
+      ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+              foregroundDecoration: BoxDecoration(
+                  color: Colors.black26
+              ),
+              height: 400,
+              child: Image.network(details.thumb, fit: BoxFit.cover)),
+          SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 250),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    details.name,
+                    style: TextStyle(color: Colors.white,
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 10.0,),
+                Container(
+                  padding: const EdgeInsets.all(32.0),
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                ),
+                                Text.rich(TextSpan(children: [
+                                  TextSpan(
+                                    text: details.userRating !=null ? ((details.userRating.aggregate_rating != null ? details.userRating.aggregate_rating:"") + "-"+(details.userRating.votes !=null ? details.userRating.votes + " votes":"")):"",
+                                  )
+                                ]), style: TextStyle(
+                                    fontSize: 20.0),),
+                                SizedBox(height: 5.0),
+                                Text.rich(TextSpan(children: [
+                                  WidgetSpan(
+                                      child: Icon(Icons.location_on, size: 20.0,
+                                      )
+                                  ),
+                                  TextSpan(
+                                      text: details.location.locality,
+                                  )
+                                ]), style: TextStyle(
+                                    fontSize: 20.0),),
+                                SizedBox(height: 5.0),
+                                Text.rich(TextSpan(children: [
+                                  WidgetSpan(
+                                      child: Icon(Icons.access_time, size: 20.0,
+                                        )
+                                  ),
+                                  TextSpan(
+                                    text: details.timings,
+                                  )
+                                ]), style: TextStyle(
+                                    fontSize: 20.0),)
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(details.averageCostForTwo.toString() + details.currency, style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0
+                              ),),
+                              Text("For two people", style: TextStyle(
+                                  fontSize: 16.0,
+                              ),)
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20.0),
 
-                }
-                else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-
-                return CircularProgressIndicator();
-              },
-            )
-        )
-
+                      Text("Cuisines".toUpperCase(), style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 25.0
+                      ),),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        details.cuisines,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18.0
+                      ),),
+                      const SizedBox(height: 10.0),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
-
   }
 
 
 }
+

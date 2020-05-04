@@ -36,28 +36,79 @@ class _FavoritesState extends State<Favorites>{
 
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+      children: snapshot.map((data) => _buildListItemV2(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+  InkWell _buildListItemV2(BuildContext context, DocumentSnapshot data){
     final restaurantInfo = RestaurantInfo.fromSnapshot(data);
 
-    return Padding(
-
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: ListTile(
-          title: Text(restaurantInfo.name),
-          trailing: Text(restaurantInfo.location.locality),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Details(restId: int.parse(restaurantInfo.id))),
+    return new InkWell(
+      //onTap go to the details
+      onTap: () => onTapped(restaurantInfo.id),
+      child:
+      Card(
+        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(15.0)),
+        elevation: 10.0,
+        child: Column(
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height/6,
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                    child: Image.network(
+                      restaurantInfo.thumb,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 5.0),
+            Padding(
+              padding: EdgeInsets.only(left: 16.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  restaurantInfo.name,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 5.0),
+            Padding(
+              padding: EdgeInsets.only(left: 16.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  restaurantInfo.location.locality,
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 5.0),
+          ],
         ),
       ),
-  );
-}
+    );
+
+  }
+
+  void onTapped(String id) {
+    print("tapped with id " + id);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Details(restId: int.parse(id))),
+    );
+  }
     }
