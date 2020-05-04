@@ -120,10 +120,10 @@ class _AddLogState extends State<AddLog>{
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
           onSubmit();
-          Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => FoodLogs()),
-          );
+
+          Navigator.pop(context);
+
+
         },
         label: Text("Submit"),
         backgroundColor: Colors.purple,
@@ -150,13 +150,14 @@ class _AddLogState extends State<AddLog>{
 
     //Snapshot of the uploading task
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    String url=reference.getDownloadURL().toString();
-    String newUrl = url.toString();
+    var downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
 
+
+    print (downloadUrl);
     print ("Submitting");
     print (Text(myController1.text).toString() + " " + Text(myController2.text).toString() + " "+_selectedDate.toString() );
-    addToLogs(myController1.text.toString(), myController2.text.toString(), _selectedDate.toString(), newUrl);
+    addToLogs(myController1.text.toString(), myController2.text.toString(), _selectedDate.toString(), downloadUrl);
 
   }
 
