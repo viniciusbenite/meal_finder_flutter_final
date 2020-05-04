@@ -10,6 +10,7 @@ class App extends StatelessWidget {
 
     return MaterialApp(
       title: 'Meal Finder',
+
       home:  MyHomePage(),
     );
   }

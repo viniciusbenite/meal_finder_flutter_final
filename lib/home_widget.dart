@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mealfinder/Details.dart';
+import 'package:mealfinder/IntroChooseDiets.dart';
 import './Feed.dart';
 import './FoodLogs.dart';
 import './Favorites.dart';
 import './Profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -14,8 +16,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<MyHomePage> {
+
+
   int _currentIndex = 0;
   String _title;
+
+
 
   final List<Widget> _children = [
     Feed(), FoodLogs(),

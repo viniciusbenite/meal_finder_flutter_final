@@ -120,10 +120,7 @@ class _AddLogState extends State<AddLog>{
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
           onSubmit();
-
           Navigator.pop(context);
-
-
         },
         label: Text("Submit"),
         backgroundColor: Colors.purple,
