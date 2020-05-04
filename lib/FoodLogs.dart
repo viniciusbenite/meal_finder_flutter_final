@@ -66,10 +66,10 @@ class _FoodLogsState extends State<FoodLogs> {
           trailing: Text(foodLog.mealDate),
           leading: ConstrainedBox(
             constraints: BoxConstraints(
-              minWidth: 44,
-              minHeight: 44,
-              maxWidth: 44,
-              maxHeight: 44,
+              minWidth: 100,
+              minHeight: 100,
+              maxWidth: 200,
+              maxHeight: 200,
             ),
             child: Image.network(foodLog.pictureUrl.toString(), fit: BoxFit.cover),
           ),
