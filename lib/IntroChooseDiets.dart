@@ -128,7 +128,7 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
       for (Diet d in diets){
         await _favoritesCollectionReference.add(d.toMap());
       }
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MyHomePage()),
       );

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'DietsChosen.dart';
+
+
 class Profile extends StatefulWidget {
 
   @override
@@ -21,6 +26,10 @@ class _ProfileState extends State<Profile>{
           borderRadius: BorderRadius.circular(18.0),
           side: BorderSide(color: Colors.black)),
         onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DietsChosen()),
+          );
         print ('Clicked chosen diets');
         },
         child: const Text(
