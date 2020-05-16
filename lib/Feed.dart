@@ -12,10 +12,24 @@ import 'Details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'Diet.dart';
 
-
-
+Future<String> getUserDiets() async {
+  QuerySnapshot querySnapshot = await Firestore.instance.collection("diets").getDocuments();
+  String keyword="";
+  for (int i = 0; i < querySnapshot.documents.length; i++) {
+    Diet diet = Diet.fromSnapshot(querySnapshot.documents[i]);
+    keyword+=diet.dietName + " ";
+  }
+  return keyword;
+}
 Future<RestaurantList> fetchRestaurants() async {
+
+  String keyword;
+  getUserDiets().then((s) {
+    keyword=s;
+    print ("keyword is "+keyword);
+  });
 
   Position position;
   if (await Permission.locationWhenInUse.request().isGranted) {
@@ -28,7 +42,7 @@ Future<RestaurantList> fetchRestaurants() async {
     double lat= position.latitude;
     double lon= position.longitude;
     final response =
-    await http.get('https://developers.zomato.com/api/v2.1/search?q=vegan?count=10&lat='+lat.toString()+'&lon='+lon.toString()+'&sort=rating&order=desc',
+    await http.get('https://developers.zomato.com/api/v2.1/search?q='+keyword+'&?count=10&lat='+lat.toString()+'&lon='+lon.toString()+'&sort=rating&order=desc',
         headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
 
     if (response.statusCode == 200) {
