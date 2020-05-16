@@ -10,25 +10,43 @@ import 'Restaurant.dart';
 import 'package:getflutter/getflutter.dart';
 import 'Details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 
 Future<RestaurantList> fetchRestaurants() async {
-  final response =
-  await http.get('https://developers.zomato.com/api/v2.1/search?count=10&sort=rating&order=desc',
-      headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return RestaurantList.fromJson(json.decode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load restaurants');
+  Position position;
+  if (await Permission.locationWhenInUse.request().isGranted) {
+    // Either the permission was already granted before or the user just granted it.
+    print ("requested");
+    position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print ("latitude" +position.latitude.toString() + " "+ position.longitude.toString());
   }
+  if (position!=null){
+    double lat= position.latitude;
+    double lon= position.longitude;
+    final response =
+    await http.get('https://developers.zomato.com/api/v2.1/search?q=vegan?count=10&lat='+lat.toString()+'&lon='+lon.toString()+'&sort=rating&order=desc',
+        headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return RestaurantList.fromJson(json.decode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load restaurants');
+    }
+  }
+
 }
 
 class Feed extends StatefulWidget {
+
+
 
   @override
   _FeedState createState() => _FeedState();
@@ -40,11 +58,17 @@ class _FeedState extends State<Feed> {
   final databaseReference = Firestore.instance;
 
 
+
   @override
-  void initState() {
+  Future<void> initState() {
     super.initState();
+
     restaurantList = fetchRestaurants();
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -177,5 +201,6 @@ class _FeedState extends State<Feed> {
         return e.toString();
       }
     }
+
 
   }

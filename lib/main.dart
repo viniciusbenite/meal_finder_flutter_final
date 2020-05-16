@@ -7,14 +7,14 @@ import 'home_widget.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
-  bool firstIme=true;
+  bool firstIme=false;
   @override
   Widget build(BuildContext context) {
 
     return MaterialApp(
       title: 'Meal Finder',
 
-      home:  bool ==true?  MyHomePage() : IntroChooseDiets(),
+      home:  bool !=true?  MyHomePage() : IntroChooseDiets(),
     );
   }
 }
