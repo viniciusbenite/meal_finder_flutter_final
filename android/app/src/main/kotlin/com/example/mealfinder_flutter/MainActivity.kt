@@ -1,4 +1,4 @@
-package com.example.mealfinder
+package com.example.mealfinder_flutter
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

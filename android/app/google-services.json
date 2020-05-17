@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "443991997091",
-    "firebase_url": "https://mealfinderflutter.firebaseio.com",
-    "project_id": "mealfinderflutter",
-    "storage_bucket": "mealfinderflutter.appspot.com"
+    "project_number": "847645304524",
+    "firebase_url": "https://mealfinderflutter-3839c.firebaseio.com",
+    "project_id": "mealfinderflutter-3839c",
+    "storage_bucket": "mealfinderflutter-3839c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:443991997091:android:6a2c2a28c977435a91dd16",
+        "mobilesdk_app_id": "1:847645304524:android:8cd6a442813d88e822c469",
         "android_client_info": {
-          "package_name": "com.example.mealfinder"
+          "package_name": "com.example.mealfinder_flutter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "443991997091-rkq9geagg6lmd1dhgb040vhs8eipgsh8.apps.googleusercontent.com",
+          "client_id": "847645304524-9fhca0kbm4gdtgg2lfutm0pjuq1oq158.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mealfinder_flutter",
+            "certificate_hash": "254bb2e96758a9e3d8bc78e56ec768bb4789ec6d"
+          }
+        },
+        {
+          "client_id": "847645304524-tkbfr6o4s4bo9tit9146ht9n37nq21lk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA4y9oI4CHNZ74-h2c-vENz5eWd8RjL0G0"
+          "current_key": "AIzaSyCspTlcDLhu0THLA158dx0JUnMZltQXR1Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "443991997091-rkq9geagg6lmd1dhgb040vhs8eipgsh8.apps.googleusercontent.com",
+              "client_id": "847645304524-tkbfr6o4s4bo9tit9146ht9n37nq21lk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

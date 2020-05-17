@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mealfinder/login.dart';
 
 import 'DietsChosen.dart';
-
+import 'sign_in.dart';
 
 class Profile extends StatefulWidget {
 
@@ -10,7 +11,27 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
+
 class _ProfileState extends State<Profile>{
+  String username;
+  String photoUrl;
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUserName().then((name) {
+      username=name;
+      print (username);
+    });
+
+    getCurrentUserPhotoUrl().then((s) {
+      print (s);
+      photoUrl=s;
+
+    });
+
+
+
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -20,7 +41,11 @@ class _ProfileState extends State<Profile>{
         child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+
+          Image.network(photoUrl != null ? photoUrl : Icons.error.toString()),
+
         const SizedBox(height: 20, width: 30,),
+
     FlatButton(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
@@ -68,7 +93,12 @@ class _ProfileState extends State<Profile>{
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.black)),
               onPressed: () {
-                print ('Clicked logout');
+                signOutGoogle();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+
               },
               child: const Text(
                   'Log out',
