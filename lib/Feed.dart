@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mealfinder/Location.dart';
 import 'package:mealfinder/RestaurantInfo.dart';
+import 'package:mealfinder/sign_in.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'RestaurantList.dart';
@@ -14,23 +16,22 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'Diet.dart';
 
-Future<String> getUserDiets() async {
-  QuerySnapshot querySnapshot = await Firestore.instance.collection("diets").getDocuments();
+_getUserDiets() async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseUser currentUser = await auth.currentUser();
+  QuerySnapshot querySnapshot = await Firestore.instance.collection("users").document(currentUser.uid).collection("diets").getDocuments();
   String keyword="";
   for (int i = 0; i < querySnapshot.documents.length; i++) {
     Diet diet = Diet.fromSnapshot(querySnapshot.documents[i]);
     keyword+=diet.dietName + " ";
   }
+
   return keyword;
 }
-Future<RestaurantList> fetchRestaurants() async {
 
-  String keyword;
-  getUserDiets().then((s) {
-    keyword=s;
-    print ("keyword is "+keyword);
-  });
-
+Future<RestaurantList> fetchRestaurants(String uidStr) async {
+  String keyword=await _getUserDiets();
+  print ("keyword is "+keyword);
   Position position;
   if (await Permission.locationWhenInUse.request().isGranted) {
     // Either the permission was already granted before or the user just granted it.
@@ -70,14 +71,15 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   Future<RestaurantList> restaurantList;
   final databaseReference = Firestore.instance;
-
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String uidStr;
 
 
   @override
   Future<void> initState() {
     super.initState();
-
-    restaurantList = fetchRestaurants();
+    _getCurrentUser();
+    restaurantList = fetchRestaurants(uidStr);
   }
 
 
@@ -205,8 +207,9 @@ class _FeedState extends State<Feed> {
     Future addToFavorites(String id, String title, String subtitle,
         String thumb) async {
       try {
+
         final CollectionReference _favoritesCollectionReference =
-        Firestore.instance.collection('favorites');
+        Firestore.instance.collection("users").document(uidStr).collection('favorites');
         RestaurantInfo restaurantInfo= new RestaurantInfo(id: id, name: title, location: new Location(locality: subtitle), thumb: thumb);
         print (restaurantInfo.location);
         await _favoritesCollectionReference.add(restaurantInfo.toMap());
@@ -216,5 +219,11 @@ class _FeedState extends State<Feed> {
       }
     }
 
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      uidStr = currentUser.uid;
+    });
+  }
 
   }

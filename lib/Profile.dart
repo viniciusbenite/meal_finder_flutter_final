@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/login.dart';
@@ -15,21 +16,13 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile>{
   String username;
   String photoUrl;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+
   @override
   void initState() {
     super.initState();
-    getCurrentUserName().then((name) {
-      username=name;
-      print (username);
-    });
-
-    getCurrentUserPhotoUrl().then((s) {
-      print (s);
-      photoUrl=s;
-
-    });
-
-
+    _getCurrentUser();
 
   }
   @override
@@ -107,6 +100,14 @@ class _ProfileState extends State<Profile>{
     ]),
     ),
     );
+  }
+
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      username = currentUser.displayName.toString();
+      photoUrl=currentUser.photoUrl.toString();
+    });
   }
 
 }

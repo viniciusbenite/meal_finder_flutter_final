@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mealfinder/sign_in.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -24,6 +26,9 @@ class AddLog extends StatefulWidget {
 
 class _AddLogState extends State<AddLog>{
   File _image;
+  String uidStr;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -41,7 +46,7 @@ class _AddLogState extends State<AddLog>{
   @override
   void initState() {
     super.initState();
-
+    _getCurrentUser();
     myController1.addListener(_printLatestValue);
     myController2.addListener(_printLatestValue2);
   }
@@ -160,14 +165,21 @@ class _AddLogState extends State<AddLog>{
 
   Future addToLogs(String logName, String mealName, String mealDate, String thumb) async {
     try {
+
       final CollectionReference _favoritesCollectionReference =
-      Firestore.instance.collection('food_logs');
+      Firestore.instance.collection("users").document(uidStr).collection('food_logs');
       FoodLog foodLog= new FoodLog(logName: logName, mealName: mealName, mealDate: mealDate, pictureUrl: thumb);
       await _favoritesCollectionReference.add(foodLog.toMap());
       return true;
     } catch (e) {
       return e.toString();
     }
+  }
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      uidStr = currentUser.uid;
+    });
   }
 
 }

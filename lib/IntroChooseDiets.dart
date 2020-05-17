@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/home_widget.dart';
+import 'package:mealfinder/sign_in.dart';
 
 import 'Diet.dart';
 
@@ -19,6 +21,8 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
   bool vegetarian=false;
   bool paleo=false;
   bool macrobiotic=false;
+  String uidStr;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   void _buttonVeganChange(){
     setState(() {
@@ -73,6 +77,7 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
   @override
   void initState() {
     super.initState();
+    _getCurrentUser();
   }
   @override
   Widget build(BuildContext context) {
@@ -119,8 +124,9 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
 
   Future saveDiets() async {
     try {
+
       final CollectionReference _favoritesCollectionReference =
-      Firestore.instance.collection('diets');
+      Firestore.instance.collection("users").document(uidStr).collection('diets');
       List<Diet> diets= new List();
       for (String s in dietList){
         diets.add(new Diet(dietName: s));
@@ -136,5 +142,12 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
     } catch (e) {
       return e.toString();
     }
+  }
+
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      uidStr = currentUser.uid;
+    });
   }
 }

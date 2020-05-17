@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mealfinder/Details.dart';
 import 'package:mealfinder/IntroChooseDiets.dart';
+import 'package:mealfinder/sign_in.dart';
 import './Feed.dart';
 import './FoodLogs.dart';
 import './Favorites.dart';
@@ -20,6 +22,8 @@ class _HomeState extends State<MyHomePage> {
 
   int _currentIndex = 0;
   String _title;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String username;
 
 
 
@@ -32,6 +36,7 @@ class _HomeState extends State<MyHomePage> {
   @override
   initState(){
     _title = 'Meal Finder';
+    _getCurrentUser();
   }
 
   @override
@@ -55,7 +60,9 @@ class _HomeState extends State<MyHomePage> {
                               break;
                        case 2: { _title = 'Favorites'; }
                         break;
-                        case 3: { _title = 'Profile'; }
+                        case 3: {
+                          _title=username;
+                        }
                              break;
           }
           });
@@ -83,6 +90,13 @@ class _HomeState extends State<MyHomePage> {
 
     );
 
+  }
+
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      username = currentUser.displayName.toString();
+    });
   }
 
 }

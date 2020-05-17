@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/RestaurantInfo.dart';
+import 'package:mealfinder/sign_in.dart';
 
 import 'Details.dart';
 
@@ -13,6 +15,15 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites>{
+  String uidStr;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,8 +33,9 @@ class _FavoritesState extends State<Favorites>{
 
   Widget _buildBody(BuildContext context) {
       return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('favorites').snapshots(),
+        stream: Firestore.instance.collection("users").document(uidStr).collection('favorites').snapshots(),
         builder: (context, snapshot) {
+          if (uidStr==null) return LinearProgressIndicator();
           if (!snapshot.hasData) return LinearProgressIndicator();
 
           return _buildList(context, snapshot.data.documents);
@@ -110,5 +122,12 @@ class _FavoritesState extends State<Favorites>{
       context,
       MaterialPageRoute(builder: (context) => Details(restId: int.parse(id))),
     );
+  }
+
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      uidStr = currentUser.uid;
+    });
   }
     }

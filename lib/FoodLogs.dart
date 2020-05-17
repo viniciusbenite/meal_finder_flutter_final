@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mealfinder/sign_in.dart';
 import 'AddLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,10 +15,13 @@ class FoodLogs extends StatefulWidget {
 }
 
 class _FoodLogsState extends State<FoodLogs> {
+  String uidStr;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
+    _getCurrentUser();
   }
 
   @override
@@ -30,9 +35,10 @@ class _FoodLogsState extends State<FoodLogs> {
       ),
     );
   }
+
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('food_logs').snapshots(),
+      stream: Firestore.instance.collection("users").document(uidStr).collection('food_logs').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildList(context, snapshot.data.documents);
@@ -87,5 +93,12 @@ class _FoodLogsState extends State<FoodLogs> {
       MaterialPageRoute(builder: (context) => AddLog()),
     );
 
+  }
+
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      uidStr = currentUser.uid;
+    });
   }
 }

@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/Diet.dart';
+import 'package:mealfinder/sign_in.dart';
 
 
 class DietsChosen extends StatefulWidget {
@@ -13,7 +15,17 @@ class DietsChosen extends StatefulWidget {
 class _DietsChosenState extends State<DietsChosen> {
   List<Diet> dietsReceived = new List();
   bool _isChecked = false;
+  String uidStr;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getCurrentUser();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +43,7 @@ class _DietsChosenState extends State<DietsChosen> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('diets').snapshots(),
+      stream: Firestore.instance.collection("users").document(uidStr).collection('diets').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildDiets(context, snapshot.data.documents);
@@ -91,6 +103,13 @@ class _DietsChosenState extends State<DietsChosen> {
             print(selectedDiets);
           });});
     }
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    print('Hello ' + currentUser.displayName.toString());
+    setState(() {
+      uidStr = currentUser.uid;
+    });
+  }
   }
 class _MyDialog extends StatefulWidget {
   _MyDialog({this.diets, this.selectedDiets, this.onSelectedDietsListChanged});
@@ -104,12 +123,16 @@ class _MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<_MyDialog> {
+  String uidStr;
   List<String> _tempSelectedDiets = [];
+  FirebaseAuth auth = FirebaseAuth.instance;
+
 
   @override
   void initState() {
     _tempSelectedDiets = widget.selectedDiets;
     super.initState();
+    _getCurrentUser();
   }
 
   @override
@@ -181,8 +204,9 @@ class _MyDialogState extends State<_MyDialog> {
   }
   Future saveDiets(List<String> diets) async {
     try {
+
       final CollectionReference _favoritesCollectionReference =
-      Firestore.instance.collection('diets');
+      Firestore.instance.collection("users").document(uidStr).collection('diets');
       List<Diet> toSend= new List();
       for (String s in diets){
         toSend.add(new Diet(dietName: s));
@@ -195,4 +219,11 @@ class _MyDialogState extends State<_MyDialog> {
       return e.toString();
     }
   }
+  _getCurrentUser () async {
+    FirebaseUser currentUser = await auth.currentUser();
+    setState(() {
+      uidStr = currentUser.uid;
+    });
+  }
+
 }
