@@ -1,20 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealfinder/RestaurantInfo.dart';
-import 'package:mealfinder/sign_in.dart';
 
 import 'Details.dart';
 
-
 class Favorites extends StatefulWidget {
-
   @override
   _FavoritesState createState() => _FavoritesState();
-
 }
 
-class _FavoritesState extends State<Favorites>{
+class _FavoritesState extends State<Favorites> {
   String uidStr;
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -22,8 +18,8 @@ class _FavoritesState extends State<Favorites>{
   void initState() {
     super.initState();
     _getCurrentUser();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,43 +28,52 @@ class _FavoritesState extends State<Favorites>{
   }
 
   Widget _buildBody(BuildContext context) {
-      return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("users").document(uidStr).collection('favorites').snapshots(),
-        builder: (context, snapshot) {
-          if (uidStr==null) return LinearProgressIndicator();
-          if (!snapshot.hasData) return LinearProgressIndicator();
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance
+          .collection("users")
+          .document(uidStr)
+          .collection('favorites')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (uidStr == null) return LinearProgressIndicator();
+        if (!snapshot.hasData) return LinearProgressIndicator();
 
-          return _buildList(context, snapshot.data.documents);
-        },
-      );
-
-  }
-
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItemV2(context, data)).toList(),
+        return _buildList(context, snapshot.data.documents);
+      },
     );
   }
 
-  InkWell _buildListItemV2(BuildContext context, DocumentSnapshot data){
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return ListView(
+      padding: const EdgeInsets.only(top: 20.0),
+      children:
+          snapshot.map((data) => _buildListItemV2(context, data)).toList(),
+    );
+  }
+
+  InkWell _buildListItemV2(BuildContext context, DocumentSnapshot data) {
     final restaurantInfo = RestaurantInfo.fromSnapshot(data);
 
     return new InkWell(
       //onTap go to the details
       onTap: () => onTapped(restaurantInfo.id),
-      child:
-      Card(
-        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(15.0)),
+      child: Card(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         elevation: 10.0,
         child: Column(
           children: <Widget>[
             Stack(
               children: <Widget>[
                 Container(
-                  height: MediaQuery.of(context).size.height/6,
-                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 6,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
@@ -113,7 +118,6 @@ class _FavoritesState extends State<Favorites>{
         ),
       ),
     );
-
   }
 
   void onTapped(String id) {
@@ -124,10 +128,10 @@ class _FavoritesState extends State<Favorites>{
     );
   }
 
-  _getCurrentUser () async {
+  _getCurrentUser() async {
     FirebaseUser currentUser = await auth.currentUser();
     setState(() {
       uidStr = currentUser.uid;
     });
   }
-    }
+}

@@ -182,7 +182,7 @@ class _CameraScreenState extends State {
     // Take the Picture in a try / catch block. If anything goes wrong,
     // catch the error.
     try {
-      // Attempt to take a picture and log where it's been saved
+      /// Attempt to take a picture and log where it's been saved
       final path = join(
         // Save picture into temp directory using the `path_provider` plugin.
         (await getTemporaryDirectory()).path,
@@ -190,9 +190,11 @@ class _CameraScreenState extends State {
       );
       print(path);
       await controller.takePicture(path);
-      // Save image
+
+      /// Save image
       GallerySaver.saveImage(path);
-      // If the picture was taken, display it on a new screen
+
+      /// If the picture was taken, display it on a new screen
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -200,7 +202,7 @@ class _CameraScreenState extends State {
         ),
       );
     } catch (e) {
-      // If an error occurs, log the error to the console.
+      /// If an error occurs, log the error to the console.
       print(e);
     }
   }

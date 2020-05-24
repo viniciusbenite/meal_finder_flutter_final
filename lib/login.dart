@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mealfinder/IntroChooseDiets.dart';
 import 'package:mealfinder/home_widget.dart';
 import 'package:mealfinder/sign_in.dart';
@@ -11,7 +9,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool firstTime=true;
+  bool firstTime = true;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +24,14 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               RaisedButton(
                 child: Text('Sign in with Google'),
-                onPressed: (){
+                onPressed: () {
                   signInWithGoogle().whenComplete(() {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
-                          return firstTime == true? IntroChooseDiets(): MyHomePage();
+                          return firstTime == true
+                              ? IntroChooseDiets()
+                              : MyHomePage();
                         },
                       ),
                     );

@@ -1,14 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/Details.dart';
-import 'package:mealfinder/IntroChooseDiets.dart';
-import 'package:mealfinder/sign_in.dart';
+import 'package:mealfinder/Map.dart';
+
+import './Favorites.dart';
 import './Feed.dart';
 import './FoodLogs.dart';
-import './Favorites.dart';
 import './Profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -18,23 +15,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<MyHomePage> {
-
-
   int _currentIndex = 0;
   String _title;
   FirebaseAuth auth = FirebaseAuth.instance;
   String username;
 
-
-
   final List<Widget> _children = [
-    Feed(), FoodLogs(),
-    Favorites(), Profile()
-
+    Feed(),
+    FoodLogs(),
+    MapView(),
+    Favorites(),
+    Profile()
   ];
 
   @override
-  initState(){
+  initState() {
     _title = 'Meal Finder';
     _getCurrentUser();
   }
@@ -45,26 +40,40 @@ class _HomeState extends State<MyHomePage> {
       appBar: AppBar(
         title: new Text(_title),
       ),
-
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
-                  switch(index) {
-                      case 0: { _title = 'Home'; }
-                      break;
-                      case 1: { _title = 'Food Logs'; }
-                              break;
-                       case 2: { _title = 'Favorites'; }
-                        break;
-                        case 3: {
-                          _title=username;
-                        }
-                             break;
-          }
+            switch (index) {
+              case 0:
+                {
+                  _title = 'Home';
+                }
+                break;
+              case 1:
+                {
+                  _title = 'Food Logs';
+                }
+                break;
+              case 2:
+                {
+                  _title = 'Map View';
+                }
+                break;
+              case 3:
+                {
+                  _title = 'Favorites';
+                }
+                break;
+              case 4:
+                {
+                  _title = username;
+                }
+                break;
+            }
           });
         },
         items: [
@@ -77,26 +86,22 @@ class _HomeState extends State<MyHomePage> {
             title: new Text('Food logs'),
           ),
           BottomNavigationBarItem(
+              icon: new Icon(Icons.map), title: new Text('Map View')),
+          BottomNavigationBarItem(
             icon: new Icon(Icons.favorite),
             title: new Text('Favorites'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile')
-          )
+              icon: Icon(Icons.person), title: Text('Profile'))
         ],
-
       ),
-
     );
-
   }
 
-  _getCurrentUser () async {
+  _getCurrentUser() async {
     FirebaseUser currentUser = await auth.currentUser();
     setState(() {
       username = currentUser.displayName.toString();
     });
   }
-
 }
