@@ -1,34 +1,33 @@
-
-
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mealfinder/sign_in.dart';
-import 'package:path/path.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mealfinder/FoodLog.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-import 'FoodLogs.dart';
-
-
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mealfinder/FoodLog.dart';
+import 'package:mealfinder/camera_screen.dart';
+import 'package:path/path.dart';
 
 class AddLog extends StatefulWidget {
-
   @override
   _AddLogState createState() => _AddLogState();
-
 }
 
-class _AddLogState extends State<AddLog>{
+class CameraApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: CameraScreen(),
+    );
+  }
+}
+
+class _AddLogState extends State<AddLog> {
   File _image;
+  File _picture;
   String uidStr;
   FirebaseAuth auth = FirebaseAuth.instance;
-
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -37,6 +36,7 @@ class _AddLogState extends State<AddLog>{
       _image = image;
     });
   }
+
   String _selectedDate;
 
   final myController1 = TextEditingController();
@@ -56,9 +56,6 @@ class _AddLogState extends State<AddLog>{
   _printLatestValue2() {
     print("Second text field: ${myController2.text}");
   }
-
-
-
 
   @override
   void dispose() {
@@ -104,20 +101,41 @@ class _AddLogState extends State<AddLog>{
                   lastDate: DateTime(2022),
                 ).then((date){
                   setState(() {
-                    _selectedDate=date.day.toString()+"/"+date.month.toString()+"/"+date.year.toString();
+                    _selectedDate = date.day.toString() +
+                        "/" +
+                        date.month.toString() +
+                        "/" +
+                        date.year.toString();
                   });
                 });
               },
             ),
-
             _image == null
                 ? Text('No image selected.')
-                : Image.file(_image, width: 200, height: 200,),
-
+                : Image.file(
+                    _image,
+                    width: 200,
+                    height: 200,
+                  ),
+            _picture == null
+                ? Text('No picture taken') //TODO inútil agora
+                : Image.file(
+                    _picture,
+                    width: 200,
+                    height: 200,
+                  ),
             RaisedButton(
               onPressed: getImage,
-              child: (Icon(Icons.add_a_photo)),
+              child: (Icon(Icons.add_photo_alternate)),
             ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CameraApp(),
+                ));
+              },
+              child: (Icon(Icons.add_a_photo)),
+            )
           ],
         ),
 
@@ -154,8 +172,6 @@ class _AddLogState extends State<AddLog>{
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     var downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-
-
     print (downloadUrl);
     print ("Submitting");
     print (Text(myController1.text).toString() + " " + Text(myController2.text).toString() + " "+_selectedDate.toString() );
@@ -175,6 +191,7 @@ class _AddLogState extends State<AddLog>{
       return e.toString();
     }
   }
+
   _getCurrentUser () async {
     FirebaseUser currentUser = await auth.currentUser();
     setState(() {

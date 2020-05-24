@@ -34,7 +34,11 @@ dependencies:
   permission_handler: 5.0.0+hotfix.6
   firebase_auth: ^0.16.0
   google_sign_in: ^4.0.4
-
+  camera: ^0.5.8+2
+  path: ^1.6.2
+  path_provider: ^1.1.0
+  esys_flutter_share: ^1.0.2
+  gallery_saver: ^2.0.1
 
 
 dev_dependencies:

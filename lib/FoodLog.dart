@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-//TODO add picture
+//TODO quando o user tira uma foto, adicioná-la automaticamente
 class FoodLog {
   final String logName;
   final String mealName;
