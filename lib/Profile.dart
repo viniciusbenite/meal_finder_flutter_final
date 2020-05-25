@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mealfinder/login.dart';
+import 'package:mealfinder/screens/login.dart';
 
 import 'DietsChosen.dart';
 import 'sign_in.dart';

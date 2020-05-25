@@ -34,6 +34,7 @@ dependencies:
   permission_handler: 5.0.0+hotfix.6
   firebase_auth: ^0.16.0
   google_sign_in: ^4.0.4
+  avatar_glow:
 
 
 
