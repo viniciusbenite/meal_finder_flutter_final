@@ -21,6 +21,63 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
   String uidStr;
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  Widget _widget(String text) {
+    Widget insideWidget;
+    switch (text) {
+      case "Vegan":
+        insideWidget = RaisedButton(
+          onPressed: _buttonVeganChange,
+          child: Text(
+            'Vegan',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      case "Vegetarian":
+        insideWidget = RaisedButton(
+          onPressed: _buttonVegetarianChange,
+          child: Text(
+            'Vegetarian',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      case "Paleo":
+        insideWidget = RaisedButton(
+          onPressed: _buttonPaleoChange,
+          child: Text(
+            'Paleo',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      case "Macrobiotic":
+        insideWidget = RaisedButton(
+          onPressed: _buttonMacrobioticChange,
+          child: Text(
+            'Macrobiotic',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      default:
+        insideWidget = Container();
+        break;
+    }
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: insideWidget,
+    );
+  }
+
   void _buttonVeganChange() {
     setState(() {
       if (vegan) {
@@ -82,44 +139,27 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.count(crossAxisCount: 2, children: <Widget>[
-          RaisedButton(
-              onPressed: _buttonVeganChange,
-              child: Text(
-                'Vegan',
-                style: Theme.of(context).textTheme.headline5,
-              )),
-          RaisedButton(
-              onPressed: _buttonVegetarianChange,
-              child: Text(
-                'Vegetarian',
-                style: Theme.of(context).textTheme.headline5,
-              )),
-          RaisedButton(
-              onPressed: _buttonPaleoChange,
-              child: Text(
-                'Paleo',
-                style: Theme.of(context).textTheme.headline5,
-              )),
-          RaisedButton(
-              onPressed: _buttonMacrobioticChange,
-              child: Text(
-                'Macrobiotic',
-                style: Theme.of(context).textTheme.headline5,
-              )),
+          _widget("Vegan"),
+          _widget("Vegetarian"),
+          _widget("Paleo"),
+          _widget("Macrobiotic"),
         ]),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => saveDiets(), label: Text('Submit')),
+      floatingActionButton:
+      FloatingActionButton.extended(
+        onPressed: () => saveDiets(),
+        label: Text('Submit'),
+      ),
     );
   }
 
   Future saveDiets() async {
     try {
       final CollectionReference _favoritesCollectionReference = Firestore
-          .instance
-          .collection("users")
-          .document(uidStr)
-          .collection('diets');
+        .instance
+        .collection("users")
+        .document(uidStr)
+        .collection('diets');
       List<Diet> diets = new List();
       for (String s in dietList) {
         diets.add(new Diet(dietName: s));
