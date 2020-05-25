@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    final color = Colors.white;
     _scale = 1 - _controller.value;
 
     return Scaffold(
@@ -47,7 +46,7 @@ class _LoginPageState extends State<LoginPage>
             AvatarGlow(
               endRadius: 90,
               duration: Duration(seconds: 2),
-              glowColor: Colors.white24,
+              glowColor: kGlowColor,
               repeat: true,
               repeatPauseDuration: Duration(seconds: 2),
               startDelay: Duration(seconds: 1),
@@ -55,7 +54,7 @@ class _LoginPageState extends State<LoginPage>
                   elevation: 8.0,
                   shape: CircleBorder(),
                   child: CircleAvatar(
-                    backgroundColor: Colors.grey[100],
+                    backgroundColor: kCircleAvatarBackgroundColor,
                     //TODO: Change logo here
                     child: FlutterLogo(
                       size: 50.0,
@@ -67,7 +66,7 @@ class _LoginPageState extends State<LoginPage>
               child: Text(
                 "Hi There",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 35.0, color: color),
+                    fontWeight: FontWeight.bold, fontSize: 35.0, color: kTextColor),
               ),
               delay: delayedAmount + 1000,
             ),
@@ -75,7 +74,7 @@ class _LoginPageState extends State<LoginPage>
               child: Text(
                 "This is MealFinder",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 35.0, color: color),
+                    fontWeight: FontWeight.bold, fontSize: 35.0, color: kTextColor),
               ),
               delay: delayedAmount + 2000,
             ),
@@ -85,7 +84,7 @@ class _LoginPageState extends State<LoginPage>
             DelayedAnimation(
               child: Text(
                 "Your diet friendly restaurant finder",
-                style: TextStyle(fontSize: 20.0, color: color),
+                style: TextStyle(fontSize: 20.0, color: kTextColor),
               ),
               delay: delayedAmount + 3000,
             ),
@@ -125,7 +124,7 @@ class _LoginPageState extends State<LoginPage>
     width: 270,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(100.0),
-      color: Colors.white,
+      color: kTextColor,
     ),
     child: Center(
       child: Text(
@@ -133,7 +132,7 @@ class _LoginPageState extends State<LoginPage>
         style: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF8185E2),
+          color: kBackgroundColor,
         ),
       ),
     ),
