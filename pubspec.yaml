@@ -41,7 +41,7 @@ dependencies:
   gallery_saver: ^2.0.1
   google_maps_flutter: ^0.5.21
   json_serializable: ^3.3.0
-  avatar_glow:
+  avatar_glow: ^1.2.0
 
 
 
