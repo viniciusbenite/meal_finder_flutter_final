@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mealfinder/home_widget.dart';
+import 'package:mealfinder/values/colors.dart';
 
 import '../Diet.dart';
 
@@ -77,35 +78,36 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Choose your diets"),
+      backgroundColor: kBackgroundColor,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.count(crossAxisCount: 2, children: <Widget>[
+          RaisedButton(
+              onPressed: _buttonVeganChange,
+              child: Text(
+                'Vegan',
+                style: Theme.of(context).textTheme.headline5,
+              )),
+          RaisedButton(
+              onPressed: _buttonVegetarianChange,
+              child: Text(
+                'Vegetarian',
+                style: Theme.of(context).textTheme.headline5,
+              )),
+          RaisedButton(
+              onPressed: _buttonPaleoChange,
+              child: Text(
+                'Paleo',
+                style: Theme.of(context).textTheme.headline5,
+              )),
+          RaisedButton(
+              onPressed: _buttonMacrobioticChange,
+              child: Text(
+                'Macrobiotic',
+                style: Theme.of(context).textTheme.headline5,
+              )),
+        ]),
       ),
-      body: GridView.count(crossAxisCount: 2, children: <Widget>[
-        RaisedButton(
-            onPressed: _buttonVeganChange,
-            child: Text(
-              'Vegan',
-              style: Theme.of(context).textTheme.headline5,
-            )),
-        RaisedButton(
-            onPressed: _buttonVegetarianChange,
-            child: Text(
-              'Vegetarian',
-              style: Theme.of(context).textTheme.headline5,
-            )),
-        RaisedButton(
-            onPressed: _buttonPaleoChange,
-            child: Text(
-              'Paleo',
-              style: Theme.of(context).textTheme.headline5,
-            )),
-        RaisedButton(
-            onPressed: _buttonMacrobioticChange,
-            child: Text(
-              'Macrobiotic',
-              style: Theme.of(context).textTheme.headline5,
-            )),
-      ]),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () => saveDiets(), label: Text('Submit')),
     );
