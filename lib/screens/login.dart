@@ -1,6 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/IntroChooseDiets.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/IntroChooseDiets.dart';
 import 'package:mealfinder/home_widget.dart';
 import 'package:mealfinder/sign_in.dart';
 import 'package:mealfinder/values/colors.dart';

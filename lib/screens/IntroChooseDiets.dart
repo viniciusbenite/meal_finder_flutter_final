@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mealfinder/home_widget.dart';
 
-import 'Diet.dart';
+import '../Diet.dart';
 
 class IntroChooseDiets extends StatefulWidget {
   @override
