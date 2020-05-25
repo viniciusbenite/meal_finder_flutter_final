@@ -42,86 +42,88 @@ class _LoginPageState extends State<LoginPage>
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 15.0,
-            ),
-            AvatarGlow(
-              endRadius: 90,
-              duration: Duration(seconds: 2),
-              glowColor: kGlowColor,
-              repeat: true,
-              repeatPauseDuration: Duration(seconds: 2),
-              startDelay: Duration(seconds: 1),
-              child: Material(
-                  elevation: 8.0,
-                  shape: CircleBorder(),
-                  child: CircleAvatar(
-                    backgroundColor: kCircleAvatarBackgroundColor,
-                    //TODO: Change logo here
-                    child: FlutterLogo(
-                      size: 50.0,
-                    ),
-                    radius: 50.0,
-                  )),
-            ),
-            DelayedAnimation(
-              child: Text(
-                "Hi There",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35.0,
-                    color: kTextColor),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 15.0,
               ),
-              delay: delayedAmount + 1000,
-            ),
-            DelayedAnimation(
-              child: Text(
-                "This is MealFinder",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35.0,
-                    color: kTextColor),
-              ),
-              delay: delayedAmount + 2000,
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            DelayedAnimation(
-              child: Text(
-                "Your diet friendly restaurant finder",
-                style: TextStyle(fontSize: 20.0, color: kTextColor),
-              ),
-              delay: delayedAmount + 3000,
-            ),
-            SizedBox(
-              height: 120.0,
-            ),
-            DelayedAnimation(
-              child: GestureDetector(
-                child: Transform.scale(
-                  scale: _scale,
-                  child: _signInButton,
-                ),
-                onTap: () {
-                  signInWithGoogle().whenComplete(() {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return firstTime == true
-                              ? IntroChooseDiets()
-                              : MyHomePage();
-                        },
+              AvatarGlow(
+                endRadius: 90,
+                duration: Duration(seconds: 2),
+                glowColor: kGlowColor,
+                repeat: true,
+                repeatPauseDuration: Duration(seconds: 2),
+                startDelay: Duration(seconds: 1),
+                child: Material(
+                    elevation: 8.0,
+                    shape: CircleBorder(),
+                    child: CircleAvatar(
+                      backgroundColor: kCircleAvatarBackgroundColor,
+                      //TODO: Change logo here
+                      child: FlutterLogo(
+                        size: 50.0,
                       ),
-                    );
-                  });
-                },
+                      radius: 50.0,
+                    )),
               ),
-              delay: delayedAmount + 4000,
-            ),
-          ],
+              DelayedAnimation(
+                child: Text(
+                  "Hi There",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35.0,
+                      color: kTextColor),
+                ),
+                delay: delayedAmount + 1000,
+              ),
+              DelayedAnimation(
+                child: Text(
+                  "This is MealFinder",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35.0,
+                      color: kTextColor),
+                ),
+                delay: delayedAmount + 2000,
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              DelayedAnimation(
+                child: Text(
+                  "Your diet friendly restaurant finder",
+                  style: TextStyle(fontSize: 20.0, color: kTextColor),
+                ),
+                delay: delayedAmount + 3000,
+              ),
+              SizedBox(
+                height: 120.0,
+              ),
+              DelayedAnimation(
+                child: GestureDetector(
+                  child: Transform.scale(
+                    scale: _scale,
+                    child: _signInButton,
+                  ),
+                  onTap: () {
+                    signInWithGoogle().whenComplete(() {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return firstTime == true
+                                ? IntroChooseDiets()
+                                : MyHomePage();
+                          },
+                        ),
+                      );
+                    });
+                  },
+                ),
+                delay: delayedAmount + 4000,
+              ),
+            ],
+          ),
         ),
       ),
     );
