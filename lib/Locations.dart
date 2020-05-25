@@ -6,72 +6,80 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'Locations.g.dart';
 
+// **********SE MUDAREM O MODELO, CORRER: flutter pub run build_runner build --delete-conflicting-outputs ***********
+
 @JsonSerializable()
 class LatLng {
   LatLng({
-    this.lat,
-    this.lng,
+    this.latitude,
+    this.longitude,
   });
 
   factory LatLng.fromJson(Map<String, dynamic> json) => _$LatLngFromJson(json);
 
   Map<String, dynamic> toJson() => _$LatLngToJson(this);
 
-  final double lat;
-  final double lng;
+  final double latitude;
+  final double longitude;
 }
 
 @JsonSerializable()
-class Region {
-  Region({
-    this.coords,
-    this.id,
-    this.name,
-    this.zoom,
-  });
-
-  factory Region.fromJson(Map<String, dynamic> json) => _$RegionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RegionToJson(this);
-
-  final LatLng coords;
-  final String id;
-  final String name;
-  final double zoom;
-}
-
-@JsonSerializable()
-class Office {
-  Office({
+class RestLocations {
+  RestLocations({
     this.address,
-    this.id,
-    this.image,
-    this.lat,
-    this.lng,
-    this.name,
-    this.phone,
-    this.region,
+    this.locality,
+    this.city,
+    this.city_id,
+    this.latitude,
+    this.longitude,
+    this.zipcode,
+    this.country_id,
+    this.locality_verbose,
   });
 
-  factory Office.fromJson(Map<String, dynamic> json) => _$OfficeFromJson(json);
+  factory RestLocations.fromJson(Map<String, dynamic> json) =>
+      _$RestLocationsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$OfficeToJson(this);
+  Map<String, dynamic> toJson() => _$RestLocationsToJson(this);
 
   final String address;
+  final String locality;
+  final String city;
+  final int city_id;
+  final String latitude;
+  final String longitude;
+  final String zipcode;
+  final int country_id;
+  final String locality_verbose;
+}
+
+@JsonSerializable()
+class Restaurants {
+  Restaurants({
+    this.id,
+    this.name,
+    this.url,
+    this.location,
+  });
+
+  factory Restaurants.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RestaurantsToJson(this);
+
   final String id;
-  final String image;
-  final double lat;
-  final double lng;
   final String name;
-  final String phone;
-  final String region;
+  final String url;
+  final List<RestLocations> location;
 }
 
 @JsonSerializable()
 class Locations {
   Locations({
-    this.offices,
-    this.regions,
+    this.results_found,
+    this.results_start,
+    this.results_shown,
+    this.restaurants,
   });
 
   factory Locations.fromJson(Map<String, dynamic> json) =>
@@ -79,21 +87,25 @@ class Locations {
 
   Map<String, dynamic> toJson() => _$LocationsToJson(this);
 
-  final List<Office> offices;
-  final List<Region> regions;
+  final int results_found;
+  final int results_start;
+  final int results_shown;
+  final List<Restaurants> restaurants;
 }
 
-Future<Locations> getGoogleOffices() async {
-  const googleLocationsURL = 'https://about.google/static/data/locations.json';
-
-  // Retrieve the locations of Google offices
-  final response = await http.get(googleLocationsURL);
+Future<Restaurants> getRestaurants() async {
+  /// Retrieve the locations of restaurants
+  final response = await http.get(
+      'https://developers.zomato.com/api/v2.1/search?lat=40.6412&lon=-8.65362',
+      headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
   if (response.statusCode == 200) {
-    return Locations.fromJson(json.decode(response.body));
+    print(response.statusCode);
+    print(json.decode(response.body)); // Response tá ok.
+    return Restaurants.fromJson(json.decode(response.body));
   } else {
     throw HttpException(
         'Unexpected status code ${response.statusCode}:'
         ' ${response.reasonPhrase}',
-        uri: Uri.parse(googleLocationsURL));
+        uri: Uri.parse('https://developers.zomato.com/api/v2.1/'));
   }
 }

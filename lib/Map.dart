@@ -17,19 +17,26 @@ class _MapViewState extends State<MapView> {
   final Map<String, Marker> _markers = {};
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
+    print("MAP CREATED");
+    final restaurants = await locations.getRestaurants();
     setState(() {
       _markers.clear();
-      for (final office in googleOffices.offices) {
+      print("ola" + restaurants.toString());
+      print(restaurants.url); //TODO Null
+      for (final location in restaurants.location) {
+        // TODO: restaurants.location. Essa merda dá null
+        print(location);
+        print(double.parse(location.latitude));
         final marker = Marker(
-          markerId: MarkerId(office.name),
-          position: LatLng(office.lat, office.lng),
+          markerId: MarkerId(location.locality),
+          position: LatLng(double.parse(location.latitude),
+              double.parse(location.longitude)),
           infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
+            title: location.locality,
+            snippet: location.address,
           ),
         );
-        _markers[office.name] = marker;
+        _markers[location.locality] = marker;
       }
     });
   }
@@ -38,14 +45,10 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
-        ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: const LatLng(0, 0),
+            target: const LatLng(40.64427, -8.64554),
             zoom: 2,
           ),
           markers: _markers.values.toSet(),
