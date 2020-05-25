@@ -43,6 +43,9 @@ class _LoginPageState extends State<LoginPage>
       body: Center(
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: 15.0,
+            ),
             AvatarGlow(
               endRadius: 90,
               duration: Duration(seconds: 2),
@@ -89,7 +92,7 @@ class _LoginPageState extends State<LoginPage>
               delay: delayedAmount + 3000,
             ),
             SizedBox(
-              height: 100.0,
+              height: 120.0,
             ),
             DelayedAnimation(
               child: GestureDetector(
