@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mealfinder/values/colors.dart';
 
-import './Favorites.dart';
-import './Feed.dart';
-import './FoodLogs.dart';
-import './Profile.dart';
+import '../Favorites.dart';
+import '../Feed.dart';
+import '../FoodLogs.dart';
+import '../Profile.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -25,14 +26,13 @@ class _HomeState extends State<MyHomePage> {
   initState() {
     _title = 'Meal Finder';
     _getCurrentUser();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: new Text(_title),
-      ),
+      backgroundColor: kBackgroundColor,
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -42,24 +42,16 @@ class _HomeState extends State<MyHomePage> {
             _currentIndex = index;
             switch (index) {
               case 0:
-                {
-                  _title = 'Home';
-                }
+                _title = 'Home';
                 break;
               case 1:
-                {
-                  _title = 'Food Logs';
-                }
+                _title = 'Food Logs';
                 break;
               case 2:
-                {
-                  _title = 'Favorites';
-                }
+                _title = 'Favorites';
                 break;
               case 3:
-                {
-                  _title = username;
-                }
+                _title = username;
                 break;
             }
           });

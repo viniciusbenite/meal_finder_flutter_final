@@ -1,11 +1,12 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/IntroChooseDiets.dart';
-import 'package:mealfinder/home_widget.dart';
+import 'package:mealfinder/screens/home_widget.dart';
 import 'package:mealfinder/sign_in.dart';
 import 'package:mealfinder/values/colors.dart';
 
+
 import '../delayed_animation.dart';
+import 'IntroChooseDiets.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -69,7 +70,9 @@ class _LoginPageState extends State<LoginPage>
               child: Text(
                 "Hi There",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 35.0, color: kTextColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35.0,
+                    color: kTextColor),
               ),
               delay: delayedAmount + 1000,
             ),
@@ -77,7 +80,9 @@ class _LoginPageState extends State<LoginPage>
               child: Text(
                 "This is MealFinder",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 35.0, color: kTextColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35.0,
+                    color: kTextColor),
               ),
               delay: delayedAmount + 2000,
             ),
