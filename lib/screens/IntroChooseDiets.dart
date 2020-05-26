@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/home_widget.dart';
+import 'package:mealfinder/screens/home_widget.dart';
+import 'package:mealfinder/values/colors.dart';
 
-import 'Diet.dart';
+import '../Diet.dart';
 
 class IntroChooseDiets extends StatefulWidget {
   @override
@@ -19,6 +20,63 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
   bool macrobiotic = false;
   String uidStr;
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  Widget _widget(String text) {
+    Widget insideWidget;
+    switch (text) {
+      case "Vegan":
+        insideWidget = RaisedButton(
+          onPressed: _buttonVeganChange,
+          child: Text(
+            'Vegan',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      case "Vegetarian":
+        insideWidget = RaisedButton(
+          onPressed: _buttonVegetarianChange,
+          child: Text(
+            'Vegetarian',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      case "Paleo":
+        insideWidget = RaisedButton(
+          onPressed: _buttonPaleoChange,
+          child: Text(
+            'Paleo',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      case "Macrobiotic":
+        insideWidget = RaisedButton(
+          onPressed: _buttonMacrobioticChange,
+          child: Text(
+            'Macrobiotic',
+            style: Theme
+              .of(context)
+              .textTheme
+              .headline5,
+          ));
+        break;
+      default:
+        insideWidget = Container();
+        break;
+    }
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: insideWidget,
+    );
+  }
 
   void _buttonVeganChange() {
     setState(() {
@@ -77,47 +135,31 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Choose your diets"),
+      backgroundColor: kBackgroundColor,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.count(crossAxisCount: 2, children: <Widget>[
+          _widget("Vegan"),
+          _widget("Vegetarian"),
+          _widget("Paleo"),
+          _widget("Macrobiotic"),
+        ]),
       ),
-      body: GridView.count(crossAxisCount: 2, children: <Widget>[
-        RaisedButton(
-            onPressed: _buttonVeganChange,
-            child: Text(
-              'Vegan',
-              style: Theme.of(context).textTheme.headline,
-            )),
-        RaisedButton(
-            onPressed: _buttonVegetarianChange,
-            child: Text(
-              'Vegetarian',
-              style: Theme.of(context).textTheme.headline,
-            )),
-        RaisedButton(
-            onPressed: _buttonPaleoChange,
-            child: Text(
-              'Paleo',
-              style: Theme.of(context).textTheme.headline,
-            )),
-        RaisedButton(
-            onPressed: _buttonMacrobioticChange,
-            child: Text(
-              'Macrobiotic',
-              style: Theme.of(context).textTheme.headline,
-            )),
-      ]),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => saveDiets(), label: Text('Submit')),
+      floatingActionButton:
+      FloatingActionButton.extended(
+        onPressed: () => saveDiets(),
+        label: Text('Submit'),
+      ),
     );
   }
 
   Future saveDiets() async {
     try {
       final CollectionReference _favoritesCollectionReference = Firestore
-          .instance
-          .collection("users")
-          .document(uidStr)
-          .collection('diets');
+        .instance
+        .collection("users")
+        .document(uidStr)
+        .collection('diets');
       List<Diet> diets = new List();
       for (String s in dietList) {
         diets.add(new Diet(dietName: s));
