@@ -6,18 +6,6 @@ part of 'Locations.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LatLng _$LatLngFromJson(Map<String, dynamic> json) {
-  return LatLng(
-    latitude: (json['latitude'] as num)?.toDouble(),
-    longitude: (json['longitude'] as num)?.toDouble(),
-  );
-}
-
-Map<String, dynamic> _$LatLngToJson(LatLng instance) => <String, dynamic>{
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
-    };
-
 RestLocations _$RestLocationsFromJson(Map<String, dynamic> json) {
   return RestLocations(
     address: json['address'] as String,
@@ -45,8 +33,55 @@ Map<String, dynamic> _$RestLocationsToJson(RestLocations instance) =>
       'locality_verbose': instance.locality_verbose,
     };
 
+HasMenuStatus _$HasMenuStatusFromJson(Map<String, dynamic> json) {
+  return HasMenuStatus(
+    delivery: json['delivery'] as int,
+    takeaway: json['takeaway'] as int,
+  );
+}
+
+Map<String, dynamic> _$HasMenuStatusToJson(HasMenuStatus instance) =>
+    <String, dynamic>{
+      'delivery': instance.delivery,
+      'takeaway': instance.takeaway,
+    };
+
+Rest _$RestFromJson(Map<String, dynamic> json) {
+  return Rest(
+    has_menu_status: (json['has_menu_status'] as List)
+        ?.map((e) => e == null
+            ? null
+            : HasMenuStatus.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$RestToJson(Rest instance) => <String, dynamic>{
+      'has_menu_status': instance.has_menu_status,
+    };
+
+Restaurant _$RestaurantFromJson(Map<String, dynamic> json) {
+  return Restaurant(
+    R: (json['R'] as List)
+        ?.map(
+            (e) => e == null ? null : Rest.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    res_id: json['res_id'] as int,
+    is_grocery_store: json['is_grocery_store'] as bool,
+  );
+}
+
+Map<String, dynamic> _$RestaurantToJson(Restaurant instance) =>
+    <String, dynamic>{
+      'R': instance.R,
+      'res_id': instance.res_id,
+      'is_grocery_store': instance.is_grocery_store,
+    };
+
 Restaurants _$RestaurantsFromJson(Map<String, dynamic> json) {
   return Restaurants(
+    restaurant: json['restaurant'] as Map<String, dynamic>,
+    apikey: json['apikey'] as String,
     id: json['id'] as String,
     name: json['name'] as String,
     url: json['url'] as String,
@@ -60,6 +95,8 @@ Restaurants _$RestaurantsFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$RestaurantsToJson(Restaurants instance) =>
     <String, dynamic>{
+      'restaurant': instance.restaurant,
+      'apikey': instance.apikey,
       'id': instance.id,
       'name': instance.name,
       'url': instance.url,

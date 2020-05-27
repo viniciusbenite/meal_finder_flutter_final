@@ -12,31 +12,46 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   GoogleMapController mapController;
   Position position;
-  final LatLng _center = const LatLng(40.6442700, -8.6455400);
-
   final Map<String, Marker> _markers = {};
 
+  double lat;
+  double long;
+  int counter = 0;
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    print("MAP CREATED");
-    final restaurants = await locations.getRestaurants();
+    print('MAP CREATED');
+    final data = await locations.getRestaurants();
     setState(() {
       _markers.clear();
-      print("ola" + restaurants.toString());
-      print(restaurants.url); //TODO Null
-      for (final location in restaurants.location) {
-        // TODO: restaurants.location. Essa merda dá null
-        print(location);
-        print(double.parse(location.latitude));
-        final marker = Marker(
-          markerId: MarkerId(location.locality),
-          position: LatLng(double.parse(location.latitude),
-              double.parse(location.longitude)),
-          infoWindow: InfoWindow(
-            title: location.locality,
-            snippet: location.address,
-          ),
-        );
-        _markers[location.locality] = marker;
+      for (final restaurant in data.restaurants) {
+        print('YY');
+        restaurant.restaurant.forEach((key, value) {
+          if (key == 'location') {
+            value.forEach((key, value) {
+              if (key == 'latitude') {
+                print('LATITUDE: $value');
+                lat = double.parse(value);
+              } else if (key == 'longitude') {
+                print('LONGITUDE: $value');
+                long = double.parse(value);
+              }
+              if (lat != null && long != null) {
+                // TODO: ñ pode ficar aqui
+                print('XX');
+                counter++;
+                var marker = Marker(
+                  markerId: MarkerId(counter.toString()),
+                  position: LatLng(lat, long),
+                  infoWindow: InfoWindow(
+                    title: counter.toString(),
+                    snippet: counter.toString(),
+                  ),
+                );
+                _markers[counter.toString()] = marker;
+              }
+            });
+          }
+        });
       }
     });
   }
@@ -48,7 +63,7 @@ class _MapViewState extends State<MapView> {
         body: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: const LatLng(40.64427, -8.64554),
+            target: const LatLng(0, 0),
             zoom: 2,
           ),
           markers: _markers.values.toSet(),

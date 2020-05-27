@@ -5,6 +5,7 @@ import 'package:mealfinder/values/colors.dart';
 import '../Favorites.dart';
 import '../Feed.dart';
 import '../FoodLogs.dart';
+import '../Map.dart';
 import '../Profile.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,7 +21,13 @@ class _HomeState extends State<MyHomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   String username;
 
-  final List<Widget> _children = [Feed(), FoodLogs(), Favorites(), Profile()];
+  final List<Widget> _children = [
+    Feed(),
+    MapView(),
+    FoodLogs(),
+    Favorites(),
+    Profile()
+  ];
 
   @override
   initState() {
@@ -45,12 +52,15 @@ class _HomeState extends State<MyHomePage> {
                 _title = 'Home';
                 break;
               case 1:
-                _title = 'Food Logs';
+                _title = 'Map view';
                 break;
               case 2:
-                _title = 'Favorites';
+                _title = 'Food Logs';
                 break;
               case 3:
+                _title = 'Favorites';
+                break;
+              case 4:
                 _title = username;
                 break;
             }
@@ -60,6 +70,10 @@ class _HomeState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: new Icon(Icons.home),
             title: new Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.map),
+            title: new Text('Map view'),
           ),
           BottomNavigationBarItem(
             icon: new Icon(Icons.restaurant_menu),
