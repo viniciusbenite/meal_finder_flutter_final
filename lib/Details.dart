@@ -2,20 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
+
 import 'RestaurantDetails.dart';
 
 Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
-  String url='https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
-  final response =
-  await http.get(url,
-      headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
+  String url =
+      'https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
+  final response = await http
+      .get(url, headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    print ('resposta' +response.body);
+    print('resposta' + response.body);
     return RestaurantDetails.fromJson(json.decode(response.body));
   } else {
     // If the server did not return a 200 OK response,
@@ -23,19 +23,17 @@ Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
     throw Exception('Failed to load restaurant details');
   }
 }
-class Details extends StatefulWidget {
 
+class Details extends StatefulWidget {
   final int restId;
 
   const Details({Key key, this.restId}) : super(key: key);
 
-
   @override
-    _DetailsState createState() => _DetailsState();
-  }
+  _DetailsState createState() => _DetailsState();
+}
 
-
-class _DetailsState extends State<Details>{
+class _DetailsState extends State<Details> {
   Future<RestaurantDetails> restDetails;
 
   @override
@@ -43,24 +41,23 @@ class _DetailsState extends State<Details>{
     super.initState();
     restDetails = fetchRestaurantDetails(widget.restId);
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Center(
-          child: FutureBuilder<RestaurantDetails>(
-            future: restDetails,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                RestaurantDetails data = snapshot.data;
-                return restDetailsView(data);
-              }
-              else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
+    return Center(
+        child: FutureBuilder<RestaurantDetails>(
+      future: restDetails,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          RestaurantDetails data = snapshot.data;
+          return restDetailsView(data);
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
 
-              return CircularProgressIndicator();
-            },
-          )
-      );
+        return CircularProgressIndicator();
+      },
+    ));
   }
 
   Widget restDetailsView(RestaurantDetails details) {
@@ -71,9 +68,7 @@ class _DetailsState extends State<Details>{
       body: Stack(
         children: <Widget>[
           Container(
-              foregroundDecoration: BoxDecoration(
-                  color: Colors.black26
-              ),
+              foregroundDecoration: BoxDecoration(color: Colors.black26),
               height: 400,
               child: Image.network(details.thumb, fit: BoxFit.cover)),
           SingleChildScrollView(
@@ -86,12 +81,15 @@ class _DetailsState extends State<Details>{
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
                     details.name,
-                    style: TextStyle(color: Colors.white,
+                    style: TextStyle(
+                        color: Colors.white,
                         fontSize: 28.0,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Container(
                   padding: const EdgeInsets.all(32.0),
                   color: Colors.white,
@@ -105,66 +103,90 @@ class _DetailsState extends State<Details>{
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Row(
+                                Row(),
+                                Text.rich(
+                                  TextSpan(children: [
+                                    TextSpan(
+                                      text: details.userRating != null
+                                          ? ((details.userRating
+                                          .aggregate_rating !=
+                                          null
+                                          ? details.userRating
+                                          .aggregate_rating
+                                          : "") +
+                                          "-" +
+                                          (details.userRating.votes != null
+                                              ? details.userRating.votes +
+                                              " votes"
+                                              : ""))
+                                          : "",
+                                    )
+                                  ]),
+                                  style: TextStyle(fontSize: 20.0),
                                 ),
-                                Text.rich(TextSpan(children: [
-                                  TextSpan(
-                                    text: details.userRating !=null ? ((details.userRating.aggregate_rating != null ? details.userRating.aggregate_rating:"") + "-"+(details.userRating.votes !=null ? details.userRating.votes + " votes":"")):"",
-                                  )
-                                ]), style: TextStyle(
-                                    fontSize: 20.0),),
                                 SizedBox(height: 5.0),
-                                Text.rich(TextSpan(children: [
-                                  WidgetSpan(
-                                      child: Icon(Icons.location_on, size: 20.0,
-                                      )
-                                  ),
-                                  TextSpan(
+                                Text.rich(
+                                  TextSpan(children: [
+                                    WidgetSpan(
+                                        child: Icon(
+                                          Icons.location_on,
+                                          size: 20.0,
+                                        )),
+                                    TextSpan(
                                       text: details.location.locality,
-                                  )
-                                ]), style: TextStyle(
-                                    fontSize: 20.0),),
+                                    )
+                                  ]),
+                                  style: TextStyle(fontSize: 20.0),
+                                ),
                                 SizedBox(height: 5.0),
-                                Text.rich(TextSpan(children: [
-                                  WidgetSpan(
-                                      child: Icon(Icons.access_time, size: 20.0,
-                                        )
-                                  ),
-                                  TextSpan(
-                                    text: details.timings,
-                                  )
-                                ]), style: TextStyle(
-                                    fontSize: 20.0),)
+                                Text.rich(
+                                  TextSpan(children: [
+                                    WidgetSpan(
+                                        child: Icon(
+                                          Icons.access_time,
+                                          size: 20.0,
+                                        )),
+                                    TextSpan(
+                                      text: details.timings,
+                                    )
+                                  ]),
+                                  style: TextStyle(fontSize: 20.0),
+                                )
                               ],
                             ),
                           ),
                           Column(
                             children: <Widget>[
-                              Text(details.averageCostForTwo.toString() + details.currency, style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0
-                              ),),
-                              Text("For two people", style: TextStyle(
+                              Text(
+                                details.averageCostForTwo.toString() +
+                                    details.currency,
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0),
+                              ),
+                              Text(
+                                "For two people",
+                                style: TextStyle(
                                   fontSize: 16.0,
-                              ),)
+                                ),
+                              )
                             ],
                           )
                         ],
                       ),
                       SizedBox(height: 20.0),
-
-                      Text("Cuisines".toUpperCase(), style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 25.0
-                      ),),
+                      Text(
+                        "Cuisines".toUpperCase(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 25.0),
+                      ),
                       const SizedBox(height: 10.0),
                       Text(
                         details.cuisines,
                         style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18.0
-                      ),),
+                            fontWeight: FontWeight.w400, fontSize: 18.0),
+                      ),
                       const SizedBox(height: 10.0),
                     ],
                   ),
@@ -176,7 +198,4 @@ class _DetailsState extends State<Details>{
       ),
     );
   }
-
-
 }
-

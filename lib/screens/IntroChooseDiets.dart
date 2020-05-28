@@ -29,11 +29,8 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
           onPressed: _buttonVeganChange,
           child: Text(
             'Vegan',
-            style: Theme
-              .of(context)
-              .textTheme
-              .headline5,
-          ));
+              style: Theme.of(context).textTheme.headline,
+            ));
         break;
       case "Vegetarian":
         insideWidget = RaisedButton(
@@ -41,9 +38,9 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
           child: Text(
             'Vegetarian',
             style: Theme
-              .of(context)
-              .textTheme
-              .headline5,
+                .of(context)
+                .textTheme
+                .headline,
           ));
         break;
       case "Paleo":
@@ -52,9 +49,9 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
           child: Text(
             'Paleo',
             style: Theme
-              .of(context)
-              .textTheme
-              .headline5,
+                .of(context)
+                .textTheme
+                .headline,
           ));
         break;
       case "Macrobiotic":
@@ -63,9 +60,9 @@ class _IntroChooseDietsState extends State<IntroChooseDiets> {
           child: Text(
             'Macrobiotic',
             style: Theme
-              .of(context)
-              .textTheme
-              .headline5,
+                .of(context)
+                .textTheme
+                .headline,
           ));
         break;
       default:

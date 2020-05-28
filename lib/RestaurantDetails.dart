@@ -1,7 +1,7 @@
 import 'Location.dart';
 import 'UserRating.dart';
 
-class RestaurantDetails{
+class RestaurantDetails {
   final String id;
   final String name;
   final Location location;
@@ -12,10 +12,18 @@ class RestaurantDetails{
   final int averageCostForTwo;
   final String currency;
 
-  RestaurantDetails({this.id, this.name, this.location, this.thumb, this.timings,
-      this.cuisines, this.averageCostForTwo, this.currency, this.userRating});
+  RestaurantDetails(
+      {this.id,
+      this.name,
+      this.location,
+      this.thumb,
+      this.timings,
+      this.cuisines,
+      this.averageCostForTwo,
+      this.currency,
+      this.userRating});
 
-  factory RestaurantDetails.fromJson(Map<String, dynamic> json){
+  factory RestaurantDetails.fromJson(Map<String, dynamic> json) {
     return RestaurantDetails(
       id: json['id'],
       name: json['name'],
@@ -28,5 +36,4 @@ class RestaurantDetails{
       currency: json['currency'],
     );
   }
-
-  }
+}

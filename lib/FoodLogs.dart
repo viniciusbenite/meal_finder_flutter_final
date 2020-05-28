@@ -1,17 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/sign_in.dart';
-import 'AddLog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'AddLog.dart';
 import 'FoodLog.dart';
 
-
 class FoodLogs extends StatefulWidget {
-
   @override
   _FoodLogsState createState() => _FoodLogsState();
-
 }
 
 class _FoodLogsState extends State<FoodLogs> {
@@ -38,16 +34,19 @@ class _FoodLogsState extends State<FoodLogs> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("users").document(uidStr).collection('food_logs').snapshots(),
+      stream: Firestore.instance
+          .collection("users")
+          .document(uidStr)
+          .collection('food_logs')
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildList(context, snapshot.data.documents);
       },
     );
-
   }
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
 
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
@@ -58,14 +57,12 @@ class _FoodLogsState extends State<FoodLogs> {
     final foodLog = FoodLog.fromSnapshot(data);
 
     return Padding(
-
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
-
         child: ListTile(
           title: Text(foodLog.logName),
           subtitle: Text(foodLog.mealName),
@@ -77,25 +74,25 @@ class _FoodLogsState extends State<FoodLogs> {
               maxWidth: 200,
               maxHeight: 200,
             ),
-            child: Image.network(foodLog.pictureUrl.toString(), fit: BoxFit.cover),
+            child:
+                Image.network(foodLog.pictureUrl.toString(), fit: BoxFit.cover),
           ),
-
-          onTap: () => print ('Clicked food log'),
-          ),
+          onTap: () => print('Clicked food log'),
         ),
-      );
+      ),
+    );
   }
-  void onAdd(){
-    print ("NEW LOG");
+
+  void onAdd() {
+    print("NEW LOG");
 
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddLog()),
     );
-
   }
 
-  _getCurrentUser () async {
+  _getCurrentUser() async {
     FirebaseUser currentUser = await auth.currentUser();
     setState(() {
       uidStr = currentUser.uid;
