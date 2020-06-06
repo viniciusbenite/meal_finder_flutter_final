@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mealfinder/Favorites.dart';
+import 'package:mealfinder/Feed.dart';
+import 'package:mealfinder/FoodLogs.dart';
+import 'package:mealfinder/Map.dart';
+import 'package:mealfinder/Profile.dart';
 import 'package:mealfinder/values/colors.dart';
-
-import '../Favorites.dart';
-import '../Feed.dart';
-import '../FoodLogs.dart';
-import '../Map.dart';
-import '../Profile.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -30,8 +29,7 @@ class _HomeState extends State<MyHomePage> {
   ];
 
   @override
-  initState() {
-    _title = 'Meal Finder';
+  void initState() {
     _getCurrentUser();
     super.initState();
   }
@@ -68,20 +66,20 @@ class _HomeState extends State<MyHomePage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: new Icon(Icons.home),
-            title: new Text('Home'),
+            icon: Icon(Icons.home),
+            title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.map),
-            title: new Text('Map view'),
+            icon: Icon(Icons.map),
+            title: Text('Map view'),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.restaurant_menu),
-            title: new Text('Food logs'),
+            icon: Icon(Icons.restaurant_menu),
+            title: Text('Food logs'),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.favorite),
-            title: new Text('Favorites'),
+            icon: Icon(Icons.favorite),
+            title: Text('Favorites'),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), title: Text('Profile'))
@@ -90,8 +88,8 @@ class _HomeState extends State<MyHomePage> {
     );
   }
 
-  _getCurrentUser() async {
-    FirebaseUser currentUser = await auth.currentUser();
+  void _getCurrentUser() async {
+    var currentUser = await auth.currentUser();
     setState(() {
       username = currentUser.displayName.toString();
     });
