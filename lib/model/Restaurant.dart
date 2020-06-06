@@ -1,8 +1,6 @@
 import 'RestaurantInfo.dart';
 
 class Restaurant {
-  final RestaurantInfo restaurantInfo;
-
   Restaurant({this.restaurantInfo});
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -10,4 +8,6 @@ class Restaurant {
       restaurantInfo: RestaurantInfo.fromJson(json['restaurant']),
     );
   }
+
+  final RestaurantInfo restaurantInfo;
 }

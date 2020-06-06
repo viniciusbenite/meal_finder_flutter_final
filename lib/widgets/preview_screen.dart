@@ -3,13 +3,13 @@ import 'dart:typed_data';
 
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/AddLog.dart';
+import 'package:mealfinder/screens/AddLog.dart';
 import 'package:path/path.dart';
 
 class PreviewImageScreen extends StatefulWidget {
-  final String imagePath;
-
   PreviewImageScreen({this.imagePath});
+
+  final String imagePath;
 
   String get picturePath {
     return imagePath;
@@ -76,7 +76,7 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
   }
 
   Future<ByteData> getBytesFromFile() async {
-    Uint8List bytes = File(widget.imagePath).readAsBytesSync();
+    var bytes = File(widget.imagePath).readAsBytesSync();
     return ByteData.view(bytes.buffer);
   }
 }

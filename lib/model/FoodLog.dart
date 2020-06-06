@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //TODO quando o user tira uma foto, adicioná-la automaticamente
 class FoodLog {
+  FoodLog({this.logName, this.mealName, this.mealDate, this.pictureUrl});
+
   final String logName;
   final String mealName;
   final String mealDate;
   final String pictureUrl;
-
-  FoodLog({this.logName, this.mealName, this.mealDate, this.pictureUrl});
 
   factory FoodLog.fromJson(Map<String, dynamic> json) {
     return FoodLog(

@@ -1,17 +1,7 @@
-import 'Location.dart';
-import 'UserRating.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/model/UserRating.dart';
+import 'package:mealfinder/model/Location.dart';
 
 class RestaurantDetails {
-  final String id;
-  final String name;
-  final Location location;
-  final String thumb;
-  final String timings;
-  final String cuisines;
-  final UserRating userRating;
-  final int averageCostForTwo;
-  final String currency;
-
   RestaurantDetails(
       {this.id,
       this.name,
@@ -36,4 +26,14 @@ class RestaurantDetails {
       currency: json['currency'],
     );
   }
+
+  final String id;
+  final String name;
+  final Location location;
+  final String thumb;
+  final String timings;
+  final String cuisines;
+  final UserRating userRating;
+  final int averageCostForTwo;
+  final String currency;
 }

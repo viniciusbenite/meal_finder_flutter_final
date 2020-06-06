@@ -4,13 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'RestaurantDetails.dart';
+import '../model/RestaurantDetails.dart';
 
 Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
-  String url =
-      'https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
+  var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
   final response = await http
-      .get(url, headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
+      .get(url, headers: {'user-key': '00469c39896ef18cd0fcbe0bf5111171'});
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -25,9 +24,9 @@ Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
 }
 
 class Details extends StatefulWidget {
-  final int restId;
-
   const Details({Key key, this.restId}) : super(key: key);
+
+  final int restId;
 
   @override
   _DetailsState createState() => _DetailsState();
@@ -49,10 +48,10 @@ class _DetailsState extends State<Details> {
       future: restDetails,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          RestaurantDetails data = snapshot.data;
+          var data = snapshot.data;
           return restDetailsView(data);
         } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+          return Text('${snapshot.error}');
         }
 
         return CircularProgressIndicator();
@@ -63,7 +62,7 @@ class _DetailsState extends State<Details> {
   Widget restDetailsView(RestaurantDetails details) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text("Details"),
+        title: Text('Details'),
       ),
       body: Stack(
         children: <Widget>[
@@ -109,17 +108,14 @@ class _DetailsState extends State<Details> {
                                     TextSpan(
                                       text: details.userRating != null
                                           ? ((details.userRating
-                                          .aggregate_rating !=
-                                          null
-                                          ? details.userRating
-                                          .aggregate_rating
-                                          : "") +
-                                          "-" +
-                                          (details.userRating.votes != null
-                                              ? details.userRating.votes +
-                                              " votes"
-                                              : ""))
-                                          : "",
+                                                      .aggregate_rating ??
+                                                  '') +
+                                              '-' +
+                                              (details.userRating.votes != null
+                                                  ? details.userRating.votes +
+                                                      ' votes'
+                                                  : ''))
+                                          : '',
                                     )
                                   ]),
                                   style: TextStyle(fontSize: 20.0),
@@ -129,9 +125,9 @@ class _DetailsState extends State<Details> {
                                   TextSpan(children: [
                                     WidgetSpan(
                                         child: Icon(
-                                          Icons.location_on,
-                                          size: 20.0,
-                                        )),
+                                      Icons.location_on,
+                                      size: 20.0,
+                                    )),
                                     TextSpan(
                                       text: details.location.locality,
                                     )
@@ -143,9 +139,9 @@ class _DetailsState extends State<Details> {
                                   TextSpan(children: [
                                     WidgetSpan(
                                         child: Icon(
-                                          Icons.access_time,
-                                          size: 20.0,
-                                        )),
+                                      Icons.access_time,
+                                      size: 20.0,
+                                    )),
                                     TextSpan(
                                       text: details.timings,
                                     )
@@ -166,7 +162,7 @@ class _DetailsState extends State<Details> {
                                     fontSize: 20.0),
                               ),
                               Text(
-                                "For two people",
+                                'For two people',
                                 style: TextStyle(
                                   fontSize: 16.0,
                                 ),
@@ -177,7 +173,7 @@ class _DetailsState extends State<Details> {
                       ),
                       SizedBox(height: 20.0),
                       Text(
-                        "Cuisines".toUpperCase(),
+                        'Cuisines'.toUpperCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 25.0),
                       ),

@@ -6,9 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mealfinder/model/Diet.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'Diet.dart';
 
 part 'Locations.g.dart';
 // flutter pub run build_runner build --delete-conflicting-outputs
@@ -134,7 +133,7 @@ class Locations {
   final List<Restaurants> restaurants;
 }
 
-_getUserDiets() async {
+Future<String> _getUserDiets() async {
   var auth = FirebaseAuth.instance;
   var currentUser = await auth.currentUser();
   var querySnapshot = await Firestore.instance
@@ -153,12 +152,10 @@ _getUserDiets() async {
 
 /// get user location
 Future<Locations> getRestaurants() async {
-  String keyword = await _getUserDiets();
+  var keyword = await _getUserDiets();
   print('keyword is ' + keyword);
   Position position;
-  if (await Permission.locationWhenInUse
-      .request()
-      .isGranted) {
+  if (await Permission.locationWhenInUse.request().isGranted) {
     // Either the permission was already granted before or the user just granted it.
     print('requested');
     position = await Geolocator()
@@ -187,7 +184,7 @@ Future<Locations> getRestaurants() async {
     } else {
       throw HttpException(
           'Unexpected status code ${response.statusCode}:'
-              ' ${response.reasonPhrase}',
+          ' ${response.reasonPhrase}',
           uri: Uri.parse('https://developers.zomato.com/api/v2.1/'));
     }
   }

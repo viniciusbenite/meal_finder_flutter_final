@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/Favorites.dart';
-import 'package:mealfinder/Feed.dart';
-import 'package:mealfinder/FoodLogs.dart';
-import 'package:mealfinder/Map.dart';
-import 'package:mealfinder/Profile.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Favorites.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Feed.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/FoodLogs.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Map.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Profile.dart';
 import 'package:mealfinder/values/colors.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -16,7 +16,6 @@ class MyHomePage extends StatefulWidget {
 
 class _HomeState extends State<MyHomePage> {
   int _currentIndex = 0;
-  String _title;
   FirebaseAuth auth = FirebaseAuth.instance;
   String username;
 
@@ -47,19 +46,14 @@ class _HomeState extends State<MyHomePage> {
             _currentIndex = index;
             switch (index) {
               case 0:
-                _title = 'Home';
                 break;
               case 1:
-                _title = 'Map view';
                 break;
               case 2:
-                _title = 'Food Logs';
                 break;
               case 3:
-                _title = 'Favorites';
                 break;
               case 4:
-                _title = username;
                 break;
             }
           });

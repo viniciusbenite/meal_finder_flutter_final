@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'AddLog.dart';
-import 'FoodLog.dart';
+import '../model/FoodLog.dart';
 
 class FoodLogs extends StatefulWidget {
   @override
@@ -35,7 +35,7 @@ class _FoodLogsState extends State<FoodLogs> {
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection("users")
+          .collection('users')
           .document(uidStr)
           .collection('food_logs')
           .snapshots(),
@@ -84,7 +84,7 @@ class _FoodLogsState extends State<FoodLogs> {
   }
 
   void onAdd() {
-    print("NEW LOG");
+    print('NEW LOG');
 
     Navigator.push(
       context,
@@ -92,8 +92,8 @@ class _FoodLogsState extends State<FoodLogs> {
     );
   }
 
-  _getCurrentUser() async {
-    FirebaseUser currentUser = await auth.currentUser();
+  void _getCurrentUser() async {
+    var currentUser = await auth.currentUser();
     setState(() {
       uidStr = currentUser.uid;
     });

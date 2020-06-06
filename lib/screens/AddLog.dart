@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mealfinder/FoodLog.dart';
-import 'package:mealfinder/camera_screen.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/model/FoodLog.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/camera_screen.dart';
 import 'package:path/path.dart';
 
 class AddLog extends StatefulWidget {
@@ -50,12 +50,12 @@ class _AddLogState extends State<AddLog> {
     myController2.addListener(_printLatestValue2);
   }
 
-  _printLatestValue() {
-    print("First text field: ${myController1.text}");
+  void _printLatestValue() {
+    print('First text field: ${myController1.text}');
   }
 
-  _printLatestValue2() {
-    print("Second text field: ${myController2.text}");
+  void _printLatestValue2() {
+    print('Second text field: ${myController2.text}');
   }
 
   @override
@@ -71,18 +71,18 @@ class _AddLogState extends State<AddLog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text("New log"),
+        title: Text('New log'),
       ),
       body: Center(
         child: Column(
           children: <Widget>[
             TextField(
               controller: myController1,
-              decoration: new InputDecoration.collapsed(hintText: 'Log Name'),
+              decoration: InputDecoration.collapsed(hintText: 'Log Name'),
             ),
             TextField(
               controller: myController2,
-              decoration: new InputDecoration.collapsed(hintText: 'Meal Name'),
+              decoration: InputDecoration.collapsed(hintText: 'Meal Name'),
             ),
             Text(_selectedDate == null
                 ? 'Select a date'
@@ -98,9 +98,9 @@ class _AddLogState extends State<AddLog> {
                 ).then((date) {
                   setState(() {
                     _selectedDate = date.day.toString() +
-                        "/" +
+                        '/' +
                         date.month.toString() +
-                        "/" +
+                        '/' +
                         date.year.toString();
                   });
                 });
@@ -140,7 +140,7 @@ class _AddLogState extends State<AddLog> {
           onSubmit();
           Navigator.pop(context);
         },
-        label: Text("Submit"),
+        label: Text('Submit'),
         backgroundColor: Colors.purple,
       ),
     );
@@ -149,39 +149,39 @@ class _AddLogState extends State<AddLog> {
   Future onSubmit() async {
     //send food log to firestore
 
-    String fileName = basename(_image.path);
-    FirebaseStorage _storage = FirebaseStorage.instance;
+    var fileName = basename(_image.path);
+    var _storage = FirebaseStorage.instance;
 
     //passing your path with the filename to Firebase Storage Reference
-    StorageReference reference = _storage.ref().child("images/$fileName");
+    var reference = _storage.ref().child('images/$fileName');
 
     //upload the file to Firebase Storage
-    StorageUploadTask uploadTask = reference.putFile(_image);
+    var uploadTask = reference.putFile(_image);
 
     //Snapshot of the uploading task
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    var taskSnapshot = await uploadTask.onComplete;
     var downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
     print(downloadUrl);
-    print("Submitting");
+    print('Submitting');
     print(Text(myController1.text).toString() +
-        " " +
+        ' ' +
         Text(myController2.text).toString() +
-        " " +
+        ' ' +
         _selectedDate.toString());
-    addToLogs(myController1.text.toString(), myController2.text.toString(),
-        _selectedDate.toString(), downloadUrl);
+    await addToLogs(myController1.text.toString(),
+        myController2.text.toString(), _selectedDate.toString(), downloadUrl);
   }
 
   Future addToLogs(
       String logName, String mealName, String mealDate, String thumb) async {
     try {
-      final CollectionReference _favoritesCollectionReference = Firestore
+      final _favoritesCollectionReference = Firestore
           .instance
-          .collection("users")
+          .collection('users')
           .document(uidStr)
           .collection('food_logs');
-      FoodLog foodLog = new FoodLog(
+      var foodLog = FoodLog(
           logName: logName,
           mealName: mealName,
           mealDate: mealDate,
@@ -193,8 +193,8 @@ class _AddLogState extends State<AddLog> {
     }
   }
 
-  _getCurrentUser() async {
-    FirebaseUser currentUser = await auth.currentUser();
+  void _getCurrentUser() async {
+    var currentUser = await auth.currentUser();
     setState(() {
       uidStr = currentUser.uid;
     });
