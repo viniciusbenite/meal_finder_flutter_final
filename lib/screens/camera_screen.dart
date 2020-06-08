@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:mealfinder/preview_screen.dart';
+import 'package:mealfinder/widgets/preview_screen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -23,13 +23,13 @@ class _CameraScreenState extends State {
     super.initState();
     availableCameras().then((availableCameras) {
       cameras = availableCameras;
-      if (cameras.length > 0) {
+      if (cameras.isNotEmpty) {
         setState(() {
           selectedCameraIdx = 0;
         });
         _initCameraController(cameras[selectedCameraIdx]).then((void v) {});
       } else {
-        print("No camera available");
+        print('No camera available');
       }
     }).catchError((err) {
       print('Error: $err.code\nError Message: $err.message');
@@ -144,7 +144,7 @@ class _CameraScreenState extends State {
     }
 
     CameraDescription selectedCamera = cameras[selectedCameraIdx];
-    CameraLensDirection lensDirection = selectedCamera.lensDirection;
+    var lensDirection = selectedCamera.lensDirection;
 
     return Expanded(
       child: Align(
@@ -192,10 +192,10 @@ class _CameraScreenState extends State {
       await controller.takePicture(path);
 
       /// Save image
-      GallerySaver.saveImage(path);
+      await GallerySaver.saveImage(path);
 
       /// If the picture was taken, display it on a new screen
-      Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => PreviewImageScreen(imagePath: path),
@@ -208,7 +208,7 @@ class _CameraScreenState extends State {
   }
 
   void _showCameraException(CameraException e) {
-    String errorText = 'Error: ${e.code}\nError Message: ${e.description}';
+    var errorText = 'Error: ${e.code}\nError Message: ${e.description}';
     print(errorText);
     print('Error: ${e.code}\n${e.description}');
   }

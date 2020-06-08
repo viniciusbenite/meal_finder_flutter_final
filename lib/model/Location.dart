@@ -1,6 +1,4 @@
 class Location {
-  final String locality;
-
   Location({this.locality});
 
   factory Location.fromJson(Map<String, dynamic> json) {
@@ -9,8 +7,9 @@ class Location {
     );
   }
 
-  toMap() =>
-      {
-        'locality': locality != null ? locality : 'unknow',
+  final String locality;
+
+  Map<String, String> toMap() => {
+        'locality': locality ?? 'unknown',
       };
 }

@@ -3,11 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Location.dart';
 
 class RestaurantInfo {
-  final String id;
-  final String name;
-  final Location location;
-  final String thumb;
-
   RestaurantInfo({this.id, this.name, this.location, this.thumb});
 
   factory RestaurantInfo.fromJson(Map<String, dynamic> json) {
@@ -28,10 +23,15 @@ class RestaurantInfo {
     );
   }
 
+  final String id;
+  final String name;
+  final Location location;
+  final String thumb;
+
   Map<String, dynamic> toMap() => {
-        'id': id != null ? id : -1,
-        'name': name != null ? name : 'unknown',
+        'id': id ?? -1,
+        'name': name ?? 'unknown',
         'location': location != null ? location.toMap() : 'unknown',
-        'thumb': thumb != null ? thumb : 'unknown',
+        'thumb': thumb ?? 'unknown',
       };
 }

@@ -1,16 +1,17 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'RestaurantDetails.dart';
+import 'package:mealfinder/model/RestaurantDetails.dart';
+import 'package:mealfinder/screens/reviewScreen.dart';
 
 Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
-  String url =
-      'https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
+  var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
   final response = await http
-      .get(url, headers: {"user-key": "00469c39896ef18cd0fcbe0bf5111171"});
+      .get(url, headers: {'user-key': '00469c39896ef18cd0fcbe0bf5111171'});
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -25,9 +26,9 @@ Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
 }
 
 class Details extends StatefulWidget {
-  final int restId;
-
   const Details({Key key, this.restId}) : super(key: key);
+
+  final int restId;
 
   @override
   _DetailsState createState() => _DetailsState();
@@ -35,35 +36,39 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   Future<RestaurantDetails> restDetails;
+  String photoUrl;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
     restDetails = fetchRestaurantDetails(widget.restId);
+    _getCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: FutureBuilder<RestaurantDetails>(
-      future: restDetails,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          RestaurantDetails data = snapshot.data;
-          return restDetailsView(data);
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
+      child: FutureBuilder<RestaurantDetails>(
+        future: restDetails,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var data = snapshot.data;
+            return restDetailsView(data);
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
 
-        return CircularProgressIndicator();
-      },
-    ));
+          return CircularProgressIndicator();
+        },
+      ),
+    );
   }
 
   Widget restDetailsView(RestaurantDetails details) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text("Details"),
+        title: Text('Details'),
       ),
       body: Stack(
         children: <Widget>[
@@ -109,17 +114,14 @@ class _DetailsState extends State<Details> {
                                     TextSpan(
                                       text: details.userRating != null
                                           ? ((details.userRating
-                                          .aggregate_rating !=
-                                          null
-                                          ? details.userRating
-                                          .aggregate_rating
-                                          : "") +
-                                          "-" +
-                                          (details.userRating.votes != null
-                                              ? details.userRating.votes +
-                                              " votes"
-                                              : ""))
-                                          : "",
+                                                      .aggregate_rating ??
+                                                  '') +
+                                              '-' +
+                                              (details.userRating.votes != null
+                                                  ? details.userRating.votes +
+                                                      ' votes'
+                                                  : ''))
+                                          : '',
                                     )
                                   ]),
                                   style: TextStyle(fontSize: 20.0),
@@ -129,9 +131,9 @@ class _DetailsState extends State<Details> {
                                   TextSpan(children: [
                                     WidgetSpan(
                                         child: Icon(
-                                          Icons.location_on,
-                                          size: 20.0,
-                                        )),
+                                      Icons.location_on,
+                                      size: 20.0,
+                                    )),
                                     TextSpan(
                                       text: details.location.locality,
                                     )
@@ -143,9 +145,9 @@ class _DetailsState extends State<Details> {
                                   TextSpan(children: [
                                     WidgetSpan(
                                         child: Icon(
-                                          Icons.access_time,
-                                          size: 20.0,
-                                        )),
+                                      Icons.access_time,
+                                      size: 20.0,
+                                    )),
                                     TextSpan(
                                       text: details.timings,
                                     )
@@ -166,7 +168,7 @@ class _DetailsState extends State<Details> {
                                     fontSize: 20.0),
                               ),
                               Text(
-                                "For two people",
+                                'For two people',
                                 style: TextStyle(
                                   fontSize: 16.0,
                                 ),
@@ -177,7 +179,7 @@ class _DetailsState extends State<Details> {
                       ),
                       SizedBox(height: 20.0),
                       Text(
-                        "Cuisines".toUpperCase(),
+                        'Cuisines'.toUpperCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 25.0),
                       ),
@@ -187,7 +189,26 @@ class _DetailsState extends State<Details> {
                         style: TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 18.0),
                       ),
+                      const SizedBox(height: 20.0),
+                      Text(
+                        'Reviews'.toUpperCase(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 25.0,
+                        ),
+                      ),
                       const SizedBox(height: 10.0),
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ReviewScreen(restId: details.id)),
+                          );
+                        },
+                        child: Text('See Reviews'),
+                      ),
                     ],
                   ),
                 ),
@@ -197,5 +218,34 @@ class _DetailsState extends State<Details> {
         ],
       ),
     );
+  }
+
+  Widget _review(RestaurantDetails details) {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(hintText: 'Leave your review'),
+        onFieldSubmitted: (text) {
+          setState(
+            () {
+              //add review
+              print('Add review: $text');
+              // details.reviews.add(text);
+              // print(details.reviews);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  void _getCurrentUser() async {
+    var currentUser = await auth.currentUser();
+    setState(() {
+      photoUrl = currentUser.photoUrl.toString();
+    });
   }
 }

@@ -1,12 +1,10 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/widgets/delayed_animation.dart';
+import 'package:mealfinder/screens/IntroChooseDiets.dart';
 import 'package:mealfinder/screens/home_widget.dart';
-import 'package:mealfinder/sign_in.dart';
+import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/utils/sign_in.dart';
 import 'package:mealfinder/values/colors.dart';
-
-
-import '../delayed_animation.dart';
-import 'IntroChooseDiets.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -45,9 +43,9 @@ class _LoginPageState extends State<LoginPage>
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(
-                height: 15.0,
-              ),
+              // SizedBox(
+              //   height: 15.0,
+              // ),
               AvatarGlow(
                 endRadius: 90,
                 duration: Duration(seconds: 2),
@@ -69,7 +67,7 @@ class _LoginPageState extends State<LoginPage>
               ),
               DelayedAnimation(
                 child: Text(
-                  "Hi There",
+                  'Hi There',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 35.0,
@@ -79,7 +77,7 @@ class _LoginPageState extends State<LoginPage>
               ),
               DelayedAnimation(
                 child: Text(
-                  "This is MealFinder",
+                  'This is MealFinder',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 35.0,
@@ -92,7 +90,7 @@ class _LoginPageState extends State<LoginPage>
               ),
               DelayedAnimation(
                 child: Text(
-                  "Your diet friendly restaurant finder",
+                  'Your diet friendly restaurant finder',
                   style: TextStyle(fontSize: 20.0, color: kTextColor),
                 ),
                 delay: delayedAmount + 3000,
@@ -129,7 +127,7 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
-  Widget _signInButton = Container(
+  final Widget _signInButton = Container(
     height: 60,
     width: 270,
     decoration: BoxDecoration(

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mealfinder/RestaurantInfo.dart';
+import 'package:mealfinder/model/RestaurantInfo.dart';
 
 import 'Details.dart';
 
@@ -30,7 +30,7 @@ class _FavoritesState extends State<Favorites> {
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection("users")
+          .collection('users')
           .document(uidStr)
           .collection('favorites')
           .snapshots(),
@@ -54,7 +54,7 @@ class _FavoritesState extends State<Favorites> {
   InkWell _buildListItemV2(BuildContext context, DocumentSnapshot data) {
     final restaurantInfo = RestaurantInfo.fromSnapshot(data);
 
-    return new InkWell(
+    return InkWell(
       //onTap go to the details
       onTap: () => onTapped(restaurantInfo.id),
       child: Card(
@@ -121,15 +121,15 @@ class _FavoritesState extends State<Favorites> {
   }
 
   void onTapped(String id) {
-    print("tapped with id " + id);
+    print('tapped with id ' + id);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Details(restId: int.parse(id))),
     );
   }
 
-  _getCurrentUser() async {
-    FirebaseUser currentUser = await auth.currentUser();
+  void _getCurrentUser() async {
+    var currentUser = await auth.currentUser();
     setState(() {
       uidStr = currentUser.uid;
     });
