@@ -43,9 +43,9 @@ class _LoginPageState extends State<LoginPage>
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(
-                height: 15.0,
-              ),
+              // SizedBox(
+              //   height: 15.0,
+              // ),
               AvatarGlow(
                 endRadius: 90,
                 duration: Duration(seconds: 2),

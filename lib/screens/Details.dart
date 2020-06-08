@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../model/RestaurantDetails.dart';
+import 'package:mealfinder/model/RestaurantDetails.dart';
+import 'package:mealfinder/screens/reviewScreen.dart';
 
 Future<RestaurantDetails> fetchRestaurantDetails(int restId) async {
   var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=$restId';
@@ -34,29 +36,33 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   Future<RestaurantDetails> restDetails;
+  String photoUrl;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
     restDetails = fetchRestaurantDetails(widget.restId);
+    _getCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: FutureBuilder<RestaurantDetails>(
-      future: restDetails,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          var data = snapshot.data;
-          return restDetailsView(data);
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
+      child: FutureBuilder<RestaurantDetails>(
+        future: restDetails,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var data = snapshot.data;
+            return restDetailsView(data);
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
 
-        return CircularProgressIndicator();
-      },
-    ));
+          return CircularProgressIndicator();
+        },
+      ),
+    );
   }
 
   Widget restDetailsView(RestaurantDetails details) {
@@ -183,7 +189,26 @@ class _DetailsState extends State<Details> {
                         style: TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 18.0),
                       ),
+                      const SizedBox(height: 20.0),
+                      Text(
+                        'Reviews'.toUpperCase(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 25.0,
+                        ),
+                      ),
                       const SizedBox(height: 10.0),
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ReviewScreen(restId: details.id)),
+                          );
+                        },
+                        child: Text('See Reviews'),
+                      ),
                     ],
                   ),
                 ),
@@ -193,5 +218,34 @@ class _DetailsState extends State<Details> {
         ],
       ),
     );
+  }
+
+  Widget _review(RestaurantDetails details) {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(hintText: 'Leave your review'),
+        onFieldSubmitted: (text) {
+          setState(
+            () {
+              //add review
+              print('Add review: $text');
+              // details.reviews.add(text);
+              // print(details.reviews);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  void _getCurrentUser() async {
+    var currentUser = await auth.currentUser();
+    setState(() {
+      photoUrl = currentUser.photoUrl.toString();
+    });
   }
 }

@@ -144,7 +144,7 @@ Future<String> _getUserDiets() async {
   var keyword = '';
   for (var i = 0; i < querySnapshot.documents.length; i++) {
     var diet = Diet.fromSnapshot(querySnapshot.documents[i]);
-    keyword += diet.dietName + " ";
+    keyword += diet.dietName + ' ';
   }
 
   return keyword;

@@ -11,7 +11,7 @@ class DietsChosen extends StatefulWidget {
 }
 
 class _DietsChosenState extends State<DietsChosen> {
-  List<Diet> dietsReceived = new List();
+  List<Diet> dietsReceived = [];
   bool _isChecked = false;
   String uidStr;
   FirebaseAuth auth = FirebaseAuth.instance;
