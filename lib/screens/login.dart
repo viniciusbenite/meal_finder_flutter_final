@@ -5,6 +5,8 @@ import 'package:mealfinder/screens/IntroChooseDiets.dart';
 import 'package:mealfinder/screens/home_widget.dart';
 import 'package:mealfinder/utils/sign_in.dart';
 import 'package:mealfinder/values/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,7 +18,7 @@ class _LoginPageState extends State<LoginPage>
   final int delayedAmount = 500;
   double _scale;
   AnimationController _controller;
-  bool firstTime = true;
+  bool firstTime;
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _LoginPageState extends State<LoginPage>
     )..addListener(() {
         setState(() {});
       });
+    _getFirstTime();
     super.initState();
   }
 
@@ -145,4 +148,20 @@ class _LoginPageState extends State<LoginPage>
       ),
     ),
   );
+
+  void _getFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    firstTime = prefs.getBool('firstTime');
+    if (firstTime == null){
+      firstTime=true;
+    }
+
+    if (firstTime){
+      prefs.setBool('firstTime', false);
+    }
+
+
+
+    print (firstTime);
+  }
 }
