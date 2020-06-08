@@ -21,10 +21,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _review(),
               Container(
-                height: 60,
+                height: MediaQuery.of(context).size.height,
                 child: buildStreamBuilder(),
               ),
             ],
@@ -56,9 +57,33 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
+  static String fromTimestampToString(DateTime time) {
+    var day = (time.day < 10) ? '0' + time.day.toString() : time.day.toString();
+    var month =
+        (time.month < 10) ? '0' + time.month.toString() : time.month.toString();
+    var year = time.year.toString().substring(2);
+    var hour = time.hour.toString();
+    var minutes = time.minute.toString();
+    return day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+  }
+
   Widget _buildListItem(context, document) {
     return Container(
-      child: Text(document['review']),
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            fromTimestampToString(document['timestamp'].toDate()),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            document['review'],
+          ),
+        ],
+      ),
     );
   }
 
@@ -69,7 +94,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
         shape: BoxShape.rectangle,
       ),
       child: TextFormField(
-        decoration: InputDecoration(hintText: 'Leave your review'),
+        decoration: InputDecoration(
+          hintText: 'Leave your review',
+        ),
         onFieldSubmitted: (text) async {
           final _firestoreReview = Firestore.instance
               .collection('restReviews')
