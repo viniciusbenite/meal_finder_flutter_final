@@ -56,9 +56,14 @@ class _FavoritesState extends State<Favorites> {
 
     return Dismissible(
       key: UniqueKey(),
-      onDismissed: (direction) {
+      onDismissed: (_) async {
         //Remove favorite here
-        
+        await Firestore.instance
+            .runTransaction((Transaction myTransaction) async {
+          await myTransaction.delete(data.reference);
+        });
+
+        print('Removed Favorite');
       },
       child: InkWell(
         //onTap go to the details
