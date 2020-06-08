@@ -51,70 +51,71 @@ class _FavoritesState extends State<Favorites> {
     );
   }
 
-  InkWell _buildListItemV2(BuildContext context, DocumentSnapshot data) {
+  Widget _buildListItemV2(BuildContext context, DocumentSnapshot data) {
     final restaurantInfo = RestaurantInfo.fromSnapshot(data);
 
-    return InkWell(
-      //onTap go to the details
-      onTap: () => onTapped(restaurantInfo.id),
-      child: Card(
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        elevation: 10.0,
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 6,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                    child: Image.network(
-                      restaurantInfo.thumb,
-                      fit: BoxFit.cover,
+    return Dismissible(
+      key: UniqueKey(),
+      onDismissed: (direction) {
+        //Remove favorite here
+        
+      },
+      child: InkWell(
+        //onTap go to the details
+        onTap: () => onTapped(restaurantInfo.id),
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          elevation: 10.0,
+          child: Column(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height / 6,
+                    width: MediaQuery.of(context).size.width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                      child: Image.network(
+                        restaurantInfo.thumb,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 5.0),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  restaurantInfo.name,
-                  style: TextStyle(
-                    fontSize: 18,
+                ],
+              ),
+              SizedBox(height: 5.0),
+              Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    restaurantInfo.name,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 5.0),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  restaurantInfo.location.locality,
-                  style: TextStyle(
-                    fontSize: 12,
+              SizedBox(height: 5.0),
+              Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    restaurantInfo.location.locality,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 5.0),
-          ],
+              SizedBox(height: 5.0),
+            ],
+          ),
         ),
       ),
     );
