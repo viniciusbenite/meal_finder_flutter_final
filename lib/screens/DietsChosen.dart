@@ -12,13 +12,11 @@ class DietsChosen extends StatefulWidget {
 
 class _DietsChosenState extends State<DietsChosen> {
   List<Diet> dietsReceived = [];
-  bool _isChecked = false;
   String uidStr;
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getCurrentUser();
   }
@@ -41,7 +39,7 @@ class _DietsChosenState extends State<DietsChosen> {
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection("users")
+          .collection('users')
           .document(uidStr)
           .collection('diets')
           .snapshots(),
@@ -63,15 +61,24 @@ class _DietsChosenState extends State<DietsChosen> {
     final diet = Diet.fromSnapshot(data);
     dietsReceived.add(diet);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: ListTile(
-          title: Text(diet.dietName),
+    return Dismissible(
+      key: UniqueKey(),
+      onDismissed: (_) async {
+        await Firestore.instance
+            .runTransaction((Transaction myTransaction) async {
+          await myTransaction.delete(data.reference);
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: ListTile(
+            title: Text(diet.dietName),
+          ),
         ),
       ),
     );
