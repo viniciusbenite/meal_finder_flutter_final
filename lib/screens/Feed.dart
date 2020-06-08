@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/model/RestaurantList.dart';
+import 'package:mealfinder/model/RestaurantList.dart';
 import 'package:mealfinder/model/Diet.dart';
 import 'package:mealfinder/model/Location.dart';
 import 'package:mealfinder/model/RestaurantInfo.dart';

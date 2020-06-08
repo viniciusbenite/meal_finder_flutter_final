@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'AddLog.dart';
-import '../model/FoodLog.dart';
+import 'package:mealfinder/screens/AddLog.dart';
+import 'package:mealfinder/model/FoodLog.dart';
 
 class FoodLogs extends StatefulWidget {
   @override

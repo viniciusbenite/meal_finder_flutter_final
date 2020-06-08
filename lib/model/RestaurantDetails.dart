@@ -1,4 +1,4 @@
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/model/UserRating.dart';
+import 'package:mealfinder/model/UserRating.dart';
 import 'package:mealfinder/model/Location.dart';
 
 class RestaurantDetails {

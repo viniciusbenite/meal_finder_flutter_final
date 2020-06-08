@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mealfinder/screens/login.dart';
 
-import 'DietsChosen.dart';
-import '../utils/sign_in.dart';
+import 'package:mealfinder/screens/DietsChosen.dart';
+import 'package:mealfinder/utils/sign_in.dart';
 
 class Profile extends StatefulWidget {
   @override

@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Favorites.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Feed.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/FoodLogs.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Map.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/Profile.dart';
+import 'package:mealfinder/screens/Favorites.dart';
+import 'package:mealfinder/screens/Feed.dart';
+import 'package:mealfinder/screens/FoodLogs.dart';
+import 'package:mealfinder/screens/Map.dart';
+import 'package:mealfinder/screens/Profile.dart';
 import 'package:mealfinder/values/colors.dart';
 
 class MyHomePage extends StatefulWidget {

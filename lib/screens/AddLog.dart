@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/model/FoodLog.dart';
-import 'file:///C:/Users/migue/Documents/work/3ano/2semestre/icm/meal_finder_flutter/lib/screens/camera_screen.dart';
+import 'package:mealfinder/model/FoodLog.dart';
+import 'package:mealfinder/screens/camera_screen.dart';
 import 'package:path/path.dart';
 
 class AddLog extends StatefulWidget {
