@@ -96,6 +96,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       child: TextFormField(
         decoration: InputDecoration(
           hintText: 'Leave your review',
+          border: OutlineInputBorder(),
         ),
         onFieldSubmitted: (text) async {
           final _firestoreReview = Firestore.instance
